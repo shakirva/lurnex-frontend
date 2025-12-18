@@ -30,21 +30,21 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
   useEffect(() => {
     if (job) {
       setFormData({
-        title: job.title,
-        company: job.company,
-        location: job.location,
-        type: job.type,
-        salary: job.salary,
-        posted: job.posted,
-        description: job.description,
-        requirements: job.requirements,
-        logo: job.logo,
-        category: job.category,
+        title: job.title || '',
+        company: job.company || '',
+        location: job.location || '',
+        type: job.type || 'Full-time',
+        salary: job.salary || '',
+        posted: job.posted || '',
+        description: job.description || '',
+        requirements: job.requirements || [],
+        logo: job.logo || '',
+        category: job.category || 'General',
         foodAccommodation: job.foodAccommodation || '',
         gender: job.gender || ''
       });
       // Set requirements input as comma-separated string for editing
-      setRequirementInput(job.requirements.join(', '));
+      setRequirementInput((job.requirements || []).join(', '));
     } else {
       // Set default posted date for new jobs
       setFormData(prev => ({

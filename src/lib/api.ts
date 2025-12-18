@@ -301,9 +301,13 @@ class ApiService {
     
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== '') {
-          queryParams.append(key, value.toString());
+        if (value === undefined || value === null) return;
+        if (typeof value === 'boolean') {
+          if (!value) return; // only include when true
+          queryParams.append(key, 'true');
+          return;
         }
+        queryParams.append(key, String(value));
       });
     }
 

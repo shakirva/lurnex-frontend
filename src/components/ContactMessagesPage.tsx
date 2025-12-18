@@ -1,15 +1,26 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { apiService } from "@/lib/api";
+
+type ContactMessageItem = {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  created_at: string;
+};
 
 export default function ContactMessagesPage() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<ContactMessageItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchMessages() {
       try {
-        const res = await axios.get("/api/contact?page=1&limit=20");
-        setMessages(res.data.data || []);
+        const res = await apiService.getContactMessages({ page: 1, limit: 20 });
+        setMessages((res.data || []) as ContactMessageItem[]);
       } catch (err) {
         setMessages([]);
       } finally {
@@ -42,7 +53,7 @@ export default function ContactMessagesPage() {
                   <td colSpan={5} className="px-6 py-4 text-center text-slate-500">No messages found.</td>
                 </tr>
               ) : (
-                messages.map((msg: any) => (
+                messages.map((msg: ContactMessageItem) => (
                   <tr key={msg.id}>
                     <td className="px-6 py-4 whitespace-nowrap">{msg.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{msg.email}</td>
