@@ -1,5 +1,6 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api';
+// Read API base from env; fallback to localhost for dev
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 // Types from backend
 export interface ApiResponse<T = any> {
