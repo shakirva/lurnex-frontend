@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { apiService, Job } from "@/lib/api";
 import { mockJobs } from "@/data/jobs";
 import JobCard from "./JobCard";
+import VideoModal from "./VideoModal";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
     fetchJobs();
@@ -42,10 +45,10 @@ export default function Home() {
                 Find a job that suits your interest & skills.
               </h1>
               <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                Aliquam vitae turpis in diam convallis finibus in at risus. Nullam 
+                Aliquam vitae turpis in diam convallis finibus in at risus. Nullam
                 in scelerisque leo, eget sollicitudin velit bestibulum.
               </p>
-              
+
               {/* Search Form */}
               <div className="bg-white rounded-md p-4 border border-slate-200 mb-8">
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -56,13 +59,13 @@ export default function Home() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                     </div>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Job title, keyword..."
                       className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B4696] focus:border-transparent text-slate-700 placeholder-slate-400"
                     />
                   </div>
-                  
+
                   {/* Location Input */}
                   <div className="flex-1 relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -71,13 +74,13 @@ export default function Home() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </div>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Your Location"
                       className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B4696] focus:border-transparent text-slate-700 placeholder-slate-400"
                     />
                   </div>
-                  
+
                   {/* Find Job Button */}
                   <button className="px-8 py-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-md font-semibold hover:opacity-90 transition-all whitespace-nowrap shadow-lg hover:shadow-xl">
                     Find Job
@@ -141,7 +144,7 @@ export default function Home() {
                 <div className="absolute bottom-24 -left-12 bg-white rounded-xl p-5 shadow-2xl border border-slate-200 animate-[float_5s_ease-in-out_infinite_0.5s] min-w-[220px]">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                    
+
                       <div>
                         <div className="text-sm font-semibold text-slate-800">10k+ Candidates</div>
                         <div className="text-xs text-slate-500 flex items-center">
@@ -151,7 +154,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Avatar Stack */}
                   <div className="flex items-center space-x-2">
                     <div className="flex -space-x-2">
@@ -183,15 +186,15 @@ export default function Home() {
                         />
                       </div>
                       <div className="w-8 h-8 bg-gradient-to-br from-slate-500 to-slate-600 rounded-full flex items-center justify-center border-3 border-white shadow-lg">
-                      <span className="text-xs text-white font-bold">+</span>
+                        <span className="text-xs text-white font-bold">+</span>
+                      </div>
                     </div>
-                    </div>
-                   
+
                     <div className="text-xs text-slate-500 font-medium">
                       +9,997 more
                     </div>
                   </div>
-                  
+
                 </div>
 
                 {/* Creative Agency Card */}
@@ -212,7 +215,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Progress Bar */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
@@ -220,13 +223,124 @@ export default function Home() {
                       <span className="text-xs font-medium text-slate-800">75%</span>
                     </div>
                     <div className="w-full bg-slate-200 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-orange-400 to-red-500 h-2 rounded-full" style={{width: '75%'}}></div>
+                      <div className="bg-gradient-to-r from-orange-400 to-red-500 h-2 rounded-full" style={{ width: '75%' }}></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Millions of Jobs Section */}
+      <section className="py-16 lg:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Image */}
+            <div className="relative">
+              <div className="bg-slate-100 rounded-lg p-6 relative overflow-hidden">
+                {/* About Image */}
+                <div className="relative z-10">
+                  <div className="w-full h-80 rounded-lg overflow-hidden relative group cursor-pointer"
+                    onClick={() => {
+                      setVideoUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); // Replace with your YouTube URL
+                      setIsVideoModalOpen(true);
+                    }}
+                  >
+                    <Image
+                      src="/about-img.png"
+                      alt="About us - Professional team working together"
+                      width={400}
+                      height={320}
+                      className="w-full h-full object-cover"
+                    />
+
+                    {/* Video Play Button Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-all duration-300">
+                      {/* Pulsing ring */}
+                      <div className="absolute w-24 h-24 bg-white/30 rounded-full animate-ping"></div>
+
+                      {/* Play button */}
+                      <div className="relative w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                        <div className="w-16 h-16 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-8 h-8 text-white ml-1"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating elements */}
+                <div className="absolute z-10 bottom-4 right-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-full w-12 h-12 flex items-center justify-center animate-bounce">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Content */}
+            <div>
+              <h2 className="text-4xl font-bold text-slate-900 mb-6">
+                Millions of Jobs. Find the one that suits you.
+              </h2>
+              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 600,000 companies worldwide.
+              </p>
+
+              {/* Feature list */}
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-700">Bring to the table win-win survival</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-700">Capitalize on low hanging fruit to identify</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-700">But I must explain to you how all this</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Statistics Section */}
+          {/* <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+              <div className="text-4xl font-bold text-slate-900 mb-2">4M</div>
+              <p className="text-slate-600">4 million daily active users</p>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-slate-900 mb-2">12k</div>
+              <p className="text-slate-600">Over 12k open job positions</p>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-slate-900 mb-2">20M</div>
+              <p className="text-slate-600">Over 20 million stories shared</p>
+            </div>
+          </div> */}
         </div>
       </section>
 
@@ -283,95 +397,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Millions of Jobs Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side - Image */}
-            <div className="relative">
-              <div className="bg-slate-100 rounded-lg p-8 relative overflow-hidden">
-                {/* About Image */}
-                <div className="relative z-10">
-                  <div className="w-full h-80 rounded-lg overflow-hidden">
-                    <Image
-                      src="/about-img.png"
-                      alt="About us - Professional team working together"
-                      width={400}
-                      height={320}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
 
-                {/* Floating elements */}
-                <div className="absolute z-10 bottom-4 right-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-full w-12 h-12 flex items-center justify-center animate-bounce">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-              </div>
-            </div>
 
-            {/* Right Side - Content */}
-            <div>
-              <h2 className="text-4xl font-bold text-slate-900 mb-6">
-                Millions of Jobs. Find the one that suits you.
-              </h2>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 600,000 companies worldwide.
-              </p>
-
-              {/* Feature list */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">Bring to the table win-win survival</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">Capitalize on low hanging fruit to identify</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">But I must explain to you how all this</span>
-                </div>
-              </div>
-
-              <button className="bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-all">
-                Get Started
-              </button>
-            </div>
-          </div>
-
-          {/* Statistics Section */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-slate-900 mb-2">4M</div>
-              <p className="text-slate-600">4 million daily active users</p>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-slate-900 mb-2">12k</div>
-              <p className="text-slate-600">Over 12k open job positions</p>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-slate-900 mb-2">20M</div>
-              <p className="text-slate-600">Over 20 million stories shared</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Video Modal */}
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+        videoUrl={videoUrl}
+      />
     </>
   );
 }
