@@ -97,7 +97,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">Job Not Found</h2>
           <p className="text-slate-600 mb-6">The job you're looking for doesn't exist or has been removed.</p>
-          <Link 
+          <Link
             href="/jobs"
             className="inline-flex items-center px-6 py-3 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
           >
@@ -150,11 +150,10 @@ export default function JobDetail({ jobId }: JobDetailProps) {
             <button
               onClick={handleApply}
               disabled={applied}
-              className={`flex items-center gap-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors ${
-                applied
+              className={`flex items-center gap-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors ${applied
                   ? "bg-green-100 text-green-800 cursor-not-allowed"
                   : "bg-green-600 text-white hover:bg-green-700"
-              }`}
+                }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -308,43 +307,21 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                       </svg>
                       Application Fee Payment
                     </h3>
-                    
+
                     <div className="space-y-6">
                       {/* Top Row - QR Scanner Section */}
                       <div className="bg-white rounded-lg p-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                           {/* Left Side - QR Code */}
                           <div className="text-center">
-                            <div className="bg-slate-100 w-48 h-48 mx-auto rounded-lg flex items-center justify-center mb-3">
-                              {/* Sample QR Code - Replace with actual QR code image */}
-                              <div className="w-46 h-46 bg-white p-2 rounded-lg border-2 border-slate-300">
-                                <svg viewBox="0 0 100 100" className="w-full h-full">
-                                  <rect width="100" height="100" fill="white"/>
-                                  <rect x="10" y="10" width="15" height="15" fill="black"/>
-                                  <rect x="30" y="10" width="5" height="5" fill="black"/>
-                                  <rect x="40" y="10" width="10" height="10" fill="black"/>
-                                  <rect x="55" y="10" width="5" height="5" fill="black"/>
-                                  <rect x="75" y="10" width="15" height="15" fill="black"/>
-                                  <rect x="10" y="30" width="5" height="5" fill="black"/>
-                                  <rect x="20" y="30" width="5" height="5" fill="black"/>
-                                  <rect x="35" y="30" width="10" height="10" fill="black"/>
-                                  <rect x="50" y="30" width="5" height="5" fill="black"/>
-                                  <rect x="65" y="30" width="10" height="10" fill="black"/>
-                                  <rect x="85" y="30" width="5" height="5" fill="black"/>
-                                  <rect x="10" y="45" width="5" height="5" fill="black"/>
-                                  <rect x="25" y="45" width="15" height="15" fill="black"/>
-                                  <rect x="60" y="45" width="15" height="15" fill="black"/>
-                                  <rect x="85" y="45" width="5" height="5" fill="black"/>
-                                  <rect x="10" y="65" width="10" height="10" fill="black"/>
-                                  <rect x="30" y="65" width="5" height="5" fill="black"/>
-                                  <rect x="45" y="65" width="10" height="10" fill="black"/>
-                                  <rect x="70" y="65" width="5" height="5" fill="black"/>
-                                  <rect x="10" y="75" width="15" height="15" fill="black"/>
-                                  <rect x="40" y="75" width="5" height="5" fill="black"/>
-                                  <rect x="55" y="75" width="10" height="10" fill="black"/>
-                                  <rect x="75" y="75" width="15" height="15" fill="black"/>
-                                </svg>
-                              </div>
+                            <div className="bg-slate-100 w-48 h-48 mx-auto rounded-lg flex items-center justify-center mb-3 overflow-hidden">
+                              <Image
+                                src="/driehoek-qrcode.png"
+                                alt="Payment QR Code"
+                                width={192}
+                                height={192}
+                                className="w-full h-full object-contain"
+                              />
                             </div>
                             <p className="text-xs text-slate-500">Scan QR Code to Pay</p>
                           </div>
@@ -352,7 +329,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                           {/* Right Side - Subscription Plans */}
                           <div>
                             <p className="text-sm font-semibold text-slate-700 mb-3 text-center">Choose Your Subscription Plan</p>
-                            
+
                             {/* Subscription Plans in Two Rows */}
                             <div className="space-y-3">
                               {/* 3 Month Plan - Top Row */}

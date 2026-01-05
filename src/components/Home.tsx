@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-24 pb-0 bg-[#F1F4FB] min-h-screen flex flex-col">
+      <section className="pt-24 pb-0 bg-[#F1F4FB] min-h-screen lg:min-h-auto flex flex-col">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start lg:items-center h-full">
             {/* Hero Text */}
@@ -45,7 +45,7 @@ export default function Home() {
                 Find a job that suits your interest & skills.
               </h1>
               <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                Aliquam vitae turpis in diam convallis finibus in at risus. Nullam
+                Connect with top employers and find opportunities that match your career goals. Nullam
                 in scelerisque leo, eget sollicitudin velit bestibulum.
               </p>
 
@@ -385,7 +385,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
               Latest Job Openings in India – Kerala
             </h2>
-            <p className="text-slate-600">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor</p>
+            <p className="text-slate-600">Explore the newest opportunities available across Kerala</p>
           </div>
 
           {/* Job Cards Grid */}
