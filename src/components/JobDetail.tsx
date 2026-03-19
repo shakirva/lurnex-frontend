@@ -128,10 +128,20 @@ export default function JobDetail({ jobId }: JobDetailProps) {
         </div>
 
         {/* Job Header */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8">
+        <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8 overflow-hidden relative">
+          {job.is_masked && (
+            <div className="absolute top-0 right-0">
+              <div className="bg-slate-900 text-white text-[10px] font-bold px-4 py-1.5 uppercase tracking-widest origin-top-right rotate-45 translate-x-8 translate-y-3 shadow-sm">
+                Locked
+              </div>
+            </div>
+          )}
+
           <div className="flex items-start justify-between mb-6">
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">{job.title} Job Opening in {job.location}</h1>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
+                {job.title} Job Opening {job.is_masked ? '' : `at ${job.company}`}
+              </h1>
               <div className="flex items-center gap-2 text-slate-600 mb-4">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -140,54 +150,137 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                 <span>{job.location}</span>
               </div>
             </div>
-            <span className="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full">
+            <span className="bg-slate-100 text-slate-700 text-sm font-bold px-4 py-1.5 rounded-lg uppercase tracking-wider">
               {job.type}
             </span>
           </div>
 
-          {/* Apply Button */}
-          <div className="mb-8">
-            <button
-              onClick={handleApply}
-              disabled={applied}
-              className={`flex items-center gap-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors ${applied
-                  ? "bg-green-100 text-green-800 cursor-not-allowed"
-                  : "bg-green-600 text-white hover:bg-green-700"
-                }`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              {applied ? "APPLIED" : "APPLY NOW"}
-            </button>
+          {/* Apply Button / Upgrade Banner */}
+          <div className="mb-10">
+            {job.is_masked ? (
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-white shrink-0">
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">Subscription Required</h3>
+                    <p className="text-sm text-slate-500">Subscribe to a plan to see full details and apply for this job.</p>
+                  </div>
+                </div>
+                <Link
+                  href="/subscription"
+                  className="w-full md:w-auto px-8 py-3 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 transition-all text-center"
+                >
+                  View Plans & Unlock
+                </Link>
+              </div>
+            ) : (
+              <button
+                onClick={handleApply}
+                disabled={applied}
+                className={`flex items-center gap-2 px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-md active:scale-95 ${applied
+                  ? "bg-green-100 text-green-700 cursor-not-allowed"
+                  : "bg-slate-900 text-white hover:bg-slate-800"
+                  }`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                {applied ? "ALREADY APPLIED" : "APPLY FOR THIS JOB"}
+              </button>
+            )}
           </div>
 
-          {/* Job Details */}
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <span className="text-slate-600 font-medium">Food & Accommodation:</span>
-                <span className="ml-2 text-slate-900">NO</span>
-              </div>
+          {/* Job Details Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-10">
+              {/* Description */}
+              <section>
+                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  Job Description
+                </h3>
+                <div className={`relative ${job.is_masked ? 'p-4' : ''}`}>
+                  <p className={`text-slate-600 leading-relaxed whitespace-pre-line ${job.is_masked ? 'blur-[3px] select-none' : ''}`}>
+                    {job.description}
+                  </p>
+                  {job.is_masked && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] rounded-lg border border-slate-100 p-6 text-center">
+                      <p className="text-slate-900 font-bold mb-2">Content Locked</p>
+                      <p className="text-sm text-slate-500 max-w-sm">Full job description is only available to subscribed members.</p>
+                    </div>
+                  )}
+                </div>
+              </section>
+
+              {/* Requirements */}
+              <section>
+                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Requirements
+                </h3>
+                <ul className={`space-y-3 ${job.is_masked ? 'blur-[3px] select-none opacity-50' : ''}`}>
+                  {job.requirements.map((req, i) => (
+                    <li key={i} className="flex items-start gap-3 text-slate-600">
+                      <span className="mt-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full shrink-0" />
+                      {req}
+                    </li>
+                  ))}
+                </ul>
+              </section>
             </div>
 
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3">Requirements</h3>
-              <div className="space-y-2">
-                <div>
-                  <span className="font-semibold text-slate-700">Required Gender:</span>
-                  <span className="ml-2 text-slate-900">Any</span>
-                </div>
-                <div>
-                  <span className="font-semibold text-slate-700">Qualification:</span>
-                  <span className="ml-2 text-slate-900">{job.requirements[job.requirements.length - 1]}</span>
+            {/* Sidebar Details */}
+            <div className="lg:col-span-1">
+              <div className="bg-slate-50 rounded-xl p-6 border border-slate-100 sticky top-24">
+                <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-xs">Overview</h4>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="p-2 bg-white rounded-lg shadow-sm">
+                      <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 font-bold uppercase">Salary</p>
+                      <p className={`font-bold ${job.is_masked ? 'text-slate-400 italic' : 'text-slate-900'}`}>{job.salary}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="p-2 bg-white rounded-lg shadow-sm">
+                      <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 font-bold uppercase">Company</p>
+                      <p className={`font-bold ${job.is_masked ? 'text-slate-400 italic' : 'text-slate-900'}`}>
+                        {job.is_masked ? 'Locked' : job.company}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="p-2 bg-white rounded-lg shadow-sm">
+                      <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400 font-bold uppercase">Gender</p>
+                      <p className="font-bold text-slate-900">{job.gender || 'Any'}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3">Job Description</h3>
-              <p className="text-slate-700 leading-relaxed">{job.description}</p>
             </div>
           </div>
         </div>

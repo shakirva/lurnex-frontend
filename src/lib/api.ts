@@ -33,6 +33,7 @@ export interface Job {
   gender?: 'Male' | 'Female' | 'Any';
   posted?: string;
   created_at: string;
+  is_masked?: boolean;
 }
 
 // Transform backend job to frontend-compatible format
@@ -122,20 +123,57 @@ class ApiService {
   // Authentication APIs
   async login(username: string, password: string): Promise<ApiResponse<LoginResponse>> {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
 
     return this.handleResponse<LoginResponse>(response);
   }
 
+  async register(userData: any): Promise<ApiResponse<LoginResponse>> {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+
+    return this.handleResponse<LoginResponse>(response);
+  }
+
+  async forgotPassword(email: string): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    return this.handleResponse(response);
+  }
+
   async logout(): Promise<ApiResponse> {
     const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-      method: 'POST',
+      method: "POST",
       headers: this.getHeaders(),
     });
 
+    return this.handleResponse(response);
+  }
+
+  // Profile APIs
+  async getProfile(): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+      headers: this.getHeaders(),
+    });
+    return this.handleResponse(response);
+  }
+
+  async updateProfile(profileData: any): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+      method: "PUT",
+      headers: this.getHeaders(),
+      body: JSON.stringify(profileData),
+    });
     return this.handleResponse(response);
   }
 
@@ -250,6 +288,7 @@ class ApiService {
     page?: number;
     limit?: number;
     status?: string;
+    email?: string;
   }): Promise<ApiResponse<any[]>> {
     const queryParams = new URLSearchParams();
     
@@ -261,9 +300,10 @@ class ApiService {
       });
     }
 
+    const endpoint = params?.email ? '/applications/my-applications' : '/applications';
     const url = queryParams.toString() 
-      ? `${API_BASE_URL}/applications?${queryParams}`
-      : `${API_BASE_URL}/applications`;
+      ? `${API_BASE_URL}${endpoint}?${queryParams}`
+      : `${API_BASE_URL}${endpoint}`;
 
     const response = await fetch(url, {
       headers: this.getHeaders(),
@@ -327,6 +367,41 @@ class ApiService {
     const response = await fetch(`${API_BASE_URL}/contact/${id}/read`, {
       method: 'PUT',
       headers: this.getHeaders(),
+    });
+
+    return this.handleResponse(response);
+  }
+
+  // Employer Specific APIs
+  async getEmployerJobs(): Promise<ApiResponse<Job[]>> {
+    const response = await fetch(`${API_BASE_URL}/employers/my-jobs`, {
+      headers: this.getHeaders(),
+    });
+
+    const result = await this.handleResponse<Job[]>(response);
+    
+    if (result.success && result.data) {
+      result.data = result.data.map(transformJob);
+    }
+    
+    return result;
+  }
+
+  async updateEmployerProfile(profileData: any): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/employers/profile`, {
+      method: "PUT",
+      headers: this.getHeaders(),
+      body: JSON.stringify(profileData),
+    });
+    return this.handleResponse(response);
+  }
+
+  // Debug APIs
+  async activateTestSubscription(userId: number, planSlug: string): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/debug/activate-subscription`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, planSlug }),
     });
 
     return this.handleResponse(response);

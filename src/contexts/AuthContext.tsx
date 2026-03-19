@@ -9,13 +9,17 @@ interface User {
   email: string;
   first_name: string;
   last_name: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'employer';
+  company_name?: string;
+  phone?: string;
 }
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   login: (username: string, password: string) => Promise<boolean>;
+  register: (userData: any) => Promise<any>;
+  forgotPassword: (email: string) => Promise<boolean>;
   logout: () => Promise<void>;
   loading: boolean;
 }
@@ -71,6 +75,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const register = async (userData: any): Promise<any> => {
+    try {
+      const response = await apiService.register(userData);
+      if (response.success && response.data) {
+        localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('userData', JSON.stringify(response.data.user));
+        setIsAuthenticated(true);
+        setUser(response.data.user as any);
+      }
+      return response;
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      return { success: false, message: error.message || 'An error occurred during registration' };
+    }
+  };
+
+  const forgotPassword = async (email: string): Promise<boolean> => {
+    try {
+      const response = await apiService.forgotPassword(email);
+      return response.success;
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      return false;
+    }
+  };
+
   const logout = async (): Promise<void> => {
     try {
       await apiService.logout();
@@ -85,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, register, forgotPassword, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

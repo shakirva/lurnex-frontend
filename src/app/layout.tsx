@@ -1,34 +1,36 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Jost } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { AuthProvider } from "../contexts/AuthContext";
+import { usePathname } from "next/navigation";
 
 const jost = Jost({
   subsets: ["latin"],
   variable: "--font-jost",
 });
 
-export const metadata: Metadata = {
-  title: "Lurnex - Find Your Dream Job",
-  description: "Discover job opportunities that match your skills and interests. Connect with top employers and advance your career.",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isEmployerPath = pathname?.startsWith('/employer');
+  const isAdminPath = pathname?.startsWith('/admin');
+  const isDashboard = isEmployerPath || isAdminPath;
+
   return (
     <html lang="en">
-      <body className={`${jost.variable} antialiased`}>
+      <body className={`${jost.variable} antialiased font-outfit`}>
         <AuthProvider>
-          <Header />
-          <main>
+          {!isDashboard && <Header />}
+          <main className={isDashboard ? "" : "min-h-screen"}>
             {children}
           </main>
-          <Footer />
+          {!isDashboard && <Footer />}
         </AuthProvider>
       </body>
     </html>

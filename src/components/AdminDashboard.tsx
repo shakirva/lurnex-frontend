@@ -39,18 +39,24 @@ export default function AdminDashboard() {
   const [showJobForm, setShowJobForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'jobs' | 'applications' | 'messages'>('jobs');
+  const [activeTab, setActiveTab] = useState<'jobs' | 'applications' | 'messages' | 'employers'>('jobs');
   const [contactMessages, setContactMessages] = useState<any[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [employers, setEmployers] = useState<any[]>([]);
+  const [loadingEmployers, setLoadingEmployers] = useState(false);
   useEffect(() => {
     fetchJobs();
     fetchApplications();
     fetchContactMessages();
+    fetchEmployers();
   }, []);
 
   useEffect(() => {
     if (activeTab === 'messages') {
       fetchContactMessages();
+    }
+    if (activeTab === 'employers') {
+      fetchEmployers();
     }
   }, [activeTab]);
   // Fetch applications for stats and table
@@ -89,7 +95,45 @@ export default function AdminDashboard() {
       setContactMessages([]);
     }
     setLoadingMessages(false);
-  }
+  };
+
+  const fetchEmployers = async () => {
+    setLoadingEmployers(true);
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/employers', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setEmployers(data.data || data || []);
+      } else {
+        setEmployers([]);
+      }
+    } catch {
+      setEmployers([]);
+    }
+    setLoadingEmployers(false);
+  };
+
+  const handleEmployerAction = async (employerId: number, action: 'approve' | 'reject' | 'activate' | 'deactivate') => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/employers/${employerId}/${action}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        fetchEmployers();
+      }
+    } catch (err) {
+      console.error('Action failed:', err);
+    }
+  };
 
   const fetchJobs = async () => {
     try {
@@ -249,6 +293,16 @@ export default function AdminDashboard() {
                   }`}
                 >
                   Messages
+                </button>
+                <button
+                  onClick={() => setActiveTab('employers')}
+                  className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
+                    activeTab === 'employers'
+                      ? 'border-[#1B4696] text-[#1B4696]'
+                      : 'border-transparent text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  Employers
                 </button>
               </div>
             </div>
@@ -455,6 +509,73 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          )}
+
+          {/* Employer Details */}
+          {activeTab === 'employers' && (
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+              <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">Registered Employers</h2>
+                  <p className="text-sm text-slate-500 mt-0.5">View details of all employer accounts</p>
+                </div>
+                <span className="text-sm font-medium text-slate-500">{employers.length} total</span>
+              </div>
+              <div className="overflow-x-auto">
+                {loadingEmployers ? (
+                  <div className="p-8 text-center text-slate-500">Loading...</div>
+                ) : employers.length === 0 ? (
+                  <div className="p-10 text-center">
+                    <p className="text-slate-400">No employers have registered yet.</p>
+                    <p className="text-slate-300 text-sm mt-1">Employer accounts will appear here once they sign up.</p>
+                  </div>
+                ) : (
+                  <table className="w-full">
+                    <thead className="bg-slate-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Username</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Company</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Phone</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Joined</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-slate-200">
+                      {employers.map((emp: any) => (
+                        <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-gradient-to-br from-[#1B4696] to-[#2FBDB9] rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                {(emp.first_name?.[0] || '').toUpperCase()}{(emp.last_name?.[0] || '').toUpperCase()}
+                              </div>
+                              <span className="font-medium text-slate-900">{emp.first_name} {emp.last_name}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-500">@{emp.username}</td>
+                          <td className="px-6 py-4 text-sm text-slate-700">{emp.company_name || <span className="text-slate-300">—</span>}</td>
+                          <td className="px-6 py-4 text-sm text-slate-700">{emp.email}</td>
+                          <td className="px-6 py-4 text-sm text-slate-700">{emp.phone || <span className="text-slate-300">—</span>}</td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${
+                              emp.is_active
+                                ? 'bg-green-50 text-green-700'
+                                : 'bg-slate-100 text-slate-500'
+                            }`}>
+                              {emp.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-500">
+                            {emp.created_at ? new Date(emp.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           )}
