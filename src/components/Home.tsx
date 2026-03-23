@@ -91,7 +91,7 @@ export default function Home() {
               </div>
 
               {/* Suggestions */}
-              <div className="text-left">
+              {/* <div className="text-left">
                 <p className="text-sm text-slate-500 mb-2">Suggestion:</p>
                 <div className="flex flex-wrap gap-2">
                   <a href="#" className="px-3 py-1 bg-slate-200 text-slate-700 rounded-full text-sm hover:bg-gradient-to-tr hover:from-[#1B4696] hover:to-[#2FBDB9] hover:text-white transition-colors">
@@ -110,7 +110,7 @@ export default function Home() {
                     Animation
                   </a>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Hero Image */}
@@ -360,8 +360,8 @@ export default function Home() {
             {Array.from(new Set(jobs.map(job => job.category || 'General'))).map(category => {
               const jobsInCategory = jobs.filter(job => (job.category || 'General') === category);
               return (
-                <div 
-                  key={category} 
+                <div
+                  key={category}
                   onClick={() => router.push(`/jobs?category=${category}`)}
                   className="bg-white rounded-2xl p-8 border border-slate-100 relative overflow-hidden cursor-pointer hover:border-indigo-600 hover:shadow-lg transition-all"
                 >

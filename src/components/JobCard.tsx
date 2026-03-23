@@ -16,18 +16,9 @@ export default function JobCard({ job }: JobCardProps) {
     <div className="group relative bg-white rounded-lg border border-slate-200 hover:border-[#1B4696] hover:shadow-lg transition-all duration-300 p-6 flex flex-col h-full">
       {/* Top Section */}
       <div className="mb-6 relative">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
-              <img 
-                src={job.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company || 'Company')}&background=1B4696&color=fff&size=48`} 
-                alt={job.company}
-                className="w-full h-full object-cover"
-              />
-            </div>
             <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#1B4696] transition-colors pr-8 line-clamp-1">
               {job.title}
             </h3>
-          </div>
           <span className="absolute top-6 right-6 bg-green-50 text-green-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
             {job.type || 'FULL-TIME'}
           </span>
