@@ -10,6 +10,7 @@ interface DashboardStats {
   totalJobs: number;
   totalApplicants: number;
   activeJobs: number;
+  hiredCount: number;
 }
 
 export default function EmployerDashboard() {
@@ -17,7 +18,7 @@ export default function EmployerDashboard() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [stats, setStats] = useState<DashboardStats>({ totalJobs: 0, totalApplicants: 0, activeJobs: 0 });
+  const [stats, setStats] = useState<DashboardStats>({ totalJobs: 0, totalApplicants: 0, activeJobs: 0, hiredCount: 0 });
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const router = useRouter();
@@ -48,20 +49,28 @@ export default function EmployerDashboard() {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const res = await apiService.getEmployerJobs();
-      const myJobs = res.data || [];
+      
+      // Parallel fetch for jobs and stats
+      const [jobsRes, statsRes] = await Promise.all([
+        apiService.getEmployerJobs(),
+        apiService.getApplicationStats()
+      ]);
+
+      const myJobs = jobsRes.data || [];
       setJobs(myJobs);
       setFilteredJobs(myJobs);
       
-      const totalApplicants = myJobs.reduce((acc: number, job: any) => acc + (job.applicant_count || 0), 0);
+      const appStats = statsRes.data || { total: 0, byStatus: [] };
+      const hiredItem = appStats.byStatus?.find((s: any) => s.status?.toLowerCase() === 'hired');
       
       setStats({
         totalJobs: myJobs.length,
         activeJobs: myJobs.filter((j: any) => j.is_active !== 0).length,
-        totalApplicants
+        totalApplicants: appStats.total || 0,
+        hiredCount: hiredItem ? hiredItem.count : 0
       });
     } catch (err) {
-      console.error("Error fetching jobs:", err);
+      console.error("Error fetching dashboard data:", err);
     } finally {
       setLoading(false);
     }
@@ -93,7 +102,6 @@ export default function EmployerDashboard() {
   const sidebarLinks = [
     { label: "Dashboard", href: "/employer/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
     { label: "Add Job", href: "/employer/post-job", icon: "M12 4v16m8-8H4" },
-    { label: "My Listings", href: "/employer/dashboard", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" },
     { label: "Profile", href: "/employer/profile", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
     { label: "Site", href: "/", icon: "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" },
   ];
@@ -180,27 +188,27 @@ export default function EmployerDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {[
             { label: "Active Postings", value: stats.activeJobs, color: "text-indigo-600", bg: "bg-indigo-50", icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" },
-            { label: "Candidates Applied", value: stats.totalApplicants, color: "text-emerald-600", bg: "bg-emerald-50", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
-            { label: "Placement Success", value: "92%", color: "text-amber-600", bg: "bg-amber-50", icon: "M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" },
+            { label: "Applicants", value: stats.totalApplicants, color: "text-emerald-600", bg: "bg-emerald-50", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
+            { label: "Hires", value: stats.hiredCount, color: "text-amber-600", bg: "bg-amber-50", icon: "M9 12l2 2 4-4" },
           ].map((s, i) => (
-            <div key={s.label} className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex items-center gap-6 group hover:shadow-md transition-all duration-300">
-              <div className={`w-14 h-14 rounded-2xl ${s.bg} ${s.color} flex items-center justify-center transition-transform group-hover:scale-110`}>
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={s.icon}/></svg>
+            <div key={s.label} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-5 group hover:shadow-md transition-all duration-300">
+              <div className={`w-12 h-12 rounded-xl ${s.bg} ${s.color} flex items-center justify-center transition-transform group-hover:scale-110 shrink-0`}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={s.icon}/></svg>
               </div>
               <div className="flex-1">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{s.label}</p>
-                <h4 className="text-3xl font-black text-slate-900 mt-1">{s.value}</h4>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.label}</p>
+                <h4 className="text-2xl font-black text-slate-900 mt-0.5">{s.value}</h4>
               </div>
             </div>
           ))}
         </div>
 
         {/* Listings Focus Section */}
-        <section className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl font-black text-slate-900 tracking-tight">Live Listings</h3>
-              <p className="text-sm text-slate-500 font-medium">Monitoring {jobs.length} open positions</p>
+              <h3 className="text-lg font-black text-slate-900 tracking-tight leading-none">Live Listings</h3>
+              <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mt-1.5">{jobs.length} open positions</p>
             </div>
             
             <div className="relative w-full md:w-80 group">
@@ -227,9 +235,9 @@ export default function EmployerDashboard() {
             ) : (
               <div className="grid grid-cols-1 gap-3">
                 {filteredJobs.map((job) => (
-                  <div key={job.id} className="group p-4 bg-white hover:bg-slate-50 border border-transparent hover:border-slate-200 rounded-2xl transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                    <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 bg-slate-900 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-black/10 group-hover:scale-105 transition-transform">
+                  <div key={job.id} className="group p-3 bg-white hover:bg-slate-50 border border-transparent hover:border-slate-200 rounded-xl transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-11 h-11 bg-slate-900 rounded-lg flex items-center justify-center text-white font-black text-base shadow-lg shadow-black/10 group-hover:scale-105 transition-transform">
                         {job.title[0]}
                       </div>
                       <div className="min-w-0">

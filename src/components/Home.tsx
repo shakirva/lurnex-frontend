@@ -5,6 +5,7 @@ import { apiService, Job } from "@/lib/api";
 import { mockJobs } from "@/data/jobs";
 import JobCard from "./JobCard";
 import VideoModal from "./VideoModal";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -12,6 +13,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     fetchJobs();
@@ -126,7 +128,7 @@ export default function Home() {
                 </div>
 
                 {/* Work Inquiry Card */}
-                <div className="absolute top-2 -right-8 bg-white rounded-lg p-4 shadow-xl border border-slate-200 animate-[float_4s_ease-in-out_infinite]">
+                {/* <div className="absolute top-2 -right-8 bg-white rounded-lg p-4 shadow-xl border border-slate-200 animate-[float_4s_ease-in-out_infinite]">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
                       <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +140,7 @@ export default function Home() {
                       <div className="font-bold text-slate-900">Ali Tufan</div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Candidates Card */}
                 <div className="absolute bottom-24 -left-12 bg-white rounded-xl p-5 shadow-2xl border border-slate-200 animate-[float_5s_ease-in-out_infinite_0.5s] min-w-[220px]">
@@ -350,15 +352,19 @@ export default function Home() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Popular Job Categories</h2>
-            <p className="text-slate-600">{mockJobs.length} jobs live</p>
+            <p className="text-slate-600">{jobs.length} jobs live</p>
           </div>
 
           {/* Categories Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from(new Set(mockJobs.map(job => job.category))).map(category => {
-              const jobsInCategory = mockJobs.filter(job => job.category === category);
+            {Array.from(new Set(jobs.map(job => job.category || 'General'))).map(category => {
+              const jobsInCategory = jobs.filter(job => (job.category || 'General') === category);
               return (
-                <div key={category} className="bg-white rounded-2xl p-8 border border-slate-100 relative overflow-hidden cursor-pointer">
+                <div 
+                  key={category} 
+                  onClick={() => router.push(`/jobs?category=${category}`)}
+                  className="bg-white rounded-2xl p-8 border border-slate-100 relative overflow-hidden cursor-pointer hover:border-indigo-600 hover:shadow-lg transition-all"
+                >
                   <div className="flex flex-col items-center text-center">
                     <div className="w-16 h-16 bg-gradient-to-tr from-[#1B4696]/10 to-[#2FBDB9]/10 rounded-2xl flex items-center justify-center mb-4">
                       {/* You can customize SVG/icon per category if needed */}
@@ -383,9 +389,9 @@ export default function Home() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
-              Latest Job Openings in India – Kerala
+              Latest Job Openings
             </h2>
-            <p className="text-slate-600">Explore the newest opportunities available across Kerala</p>
+            <p className="text-slate-600">Explore the newest opportunities available on Lurnex Hub</p>
           </div>
 
           {/* Job Cards Grid */}

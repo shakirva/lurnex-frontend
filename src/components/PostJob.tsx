@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 
 const CATEGORIES = ["Accounting", "Engineering", "IT & Technology", "Healthcare", "Hospitality", "Construction", "Sales", "Marketing", "Education", "Other"];
-const LOCATIONS = ["Dubai, UAE", "Abu Dhabi, UAE", "Sharjah, UAE", "Riyadh, Saudi Arabia", "Jeddah, Saudi Arabia", "Doha, Qatar", "Kuwait City, Kuwait", "Manama, Bahrain", "Muscat, Oman", "Other"];
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship", "Remote"];
 
 const Field = ({ label, name, value, onChange, type = "text", as, children, ...rest }: any) => {
@@ -44,7 +43,6 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     requirements: '',
     category: '',
     gender: 'Any',
-    food_accommodation: 'Not Provided',
   });
 
   useEffect(() => {
@@ -83,7 +81,6 @@ export default function PostJob({ jobId }: { jobId?: number }) {
           requirements: res.data.requirements?.join('\n') || '',
           category: res.data.category_name || '',
           gender: res.data.gender || 'Any',
-          food_accommodation: res.data.food_accommodation || 'Not Provided',
         });
       }
     } catch (err) {
@@ -111,6 +108,8 @@ export default function PostJob({ jobId }: { jobId?: number }) {
       const payload = {
         ...formData,
         requirements: formData.requirements.split('\n').filter(r => r.trim()),
+        is_active: true,
+        status: 'active'
       };
 
       const res = jobId
@@ -141,7 +140,6 @@ export default function PostJob({ jobId }: { jobId?: number }) {
   const sidebarLinks = [
     { label: "Dashboard", href: "/employer/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
     { label: "Add Job", href: "/employer/post-job", icon: "M12 4v16m8-8H4" },
-    { label: "My Listings", href: "/employer/dashboard", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" },
     { label: "Profile", href: "/employer/profile", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
     { label: "Site", href: "/", icon: "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" },
   ];
@@ -159,8 +157,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
 
         <nav className="flex-1 px-4 space-y-1 mt-2">
           {sidebarLinks.map((link) => {
-            const isListingGroup = link.label === "My Listings" || link.label === "Dashboard";
-            const isActive = isListingGroup ? (pathname === "/employer/dashboard") : (pathname === link.href);
+            const isActive = pathname === link.href;
             return (
               <Link
                 key={link.label}
@@ -245,10 +242,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <Field label="Primary Location *" name="location" value={formData.location} onChange={handleChange} as="select" required>
-                      <option value="">Choose hub location...</option>
-                      {LOCATIONS.map(l => <option key={l}>{l}</option>)}
-                    </Field>
+                    <Field label="Primary Location *" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Dubai, UAE" required />
                     <Field label="Contract Modality *" name="type" value={formData.type} onChange={handleChange} as="select" required>
                       {JOB_TYPES.map(t => <option key={t}>{t}</option>)}
                     </Field>
@@ -264,10 +258,6 @@ export default function PostJob({ jobId }: { jobId?: number }) {
                       {['Any', 'Male', 'Female'].map(g => <option key={g}>{g}</option>)}
                     </Field>
                   </div>
-
-                  <Field label="Logistics & Support Offering" name="food_accommodation" value={formData.food_accommodation} onChange={handleChange} as="select">
-                    {['Not Provided', 'Provided', 'Partial Support'].map(f => <option key={f}>{f}</option>)}
-                  </Field>
 
                   <Field label="Mission Overview *" name="description" value={formData.description} onChange={handleChange} as="textarea" placeholder="Detail the core responsibilities, strategic impact, and team environment..." required />
 

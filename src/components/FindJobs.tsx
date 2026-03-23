@@ -5,37 +5,66 @@ import Image from "next/image";
 import Link from "next/link";
 import { apiService, Job } from "@/lib/api";
 import JobCard from "./JobCard";
+import { useSearchParams } from "next/navigation";
 
-const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote'];
-const locations = ['New York, NY', 'San Francisco, CA', 'Austin, TX', 'Seattle, WA', 'Chicago, IL', 'Boston, MA', 'Los Angeles, CA'];
+const jobTypes = ['All', 'Full-time', 'Part-time', 'Contract', 'Internship', 'Remote'];
+const locations = ['All', 'Dubai, UAE', 'Abu Dhabi, UAE', 'Sharjah, UAE', 'Riyadh, Saudi Arabia', 'Jeddah, Saudi Arabia', 'Doha, Qatar', 'Kuwait City, Kuwait', 'Manama, Bahrain', 'Muscat, Oman', 'Other'];
+const categories = ['All', "Accounting", "Engineering", "IT & Technology", "Healthcare", "Hospitality", "Construction", "Sales", "Marketing", "Education", "Other"];
 
 export default function FindJobs() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam || "All");
   const [sortBy, setSortBy] = useState("newest");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    fetchJobs();
-  }, [searchTerm, selectedType, selectedLocation]);
+    setPage(1);
+    fetchJobs(1, true);
+  }, [searchTerm, selectedType, selectedLocation, selectedCategory]);
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (pageToFetch: number = 1, isInitial: boolean = false) => {
     try {
-      setLoading(true);
+      if (isInitial) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
       setError(null);
       
-      const params: any = {};
+      const params: any = {
+        page: pageToFetch,
+        limit: 10
+      };
       if (searchTerm) params.search = searchTerm;
       if (selectedType !== "All") params.type = selectedType;
       if (selectedLocation !== "All") params.location = selectedLocation;
+      if (selectedCategory !== "All") params.category = selectedCategory;
 
       const response = await apiService.getJobs(params);
       
       if (response.success && response.data) {
-        setJobs(response.data);
+        if (isInitial) {
+          setJobs(response.data);
+        } else {
+          setJobs(prev => [...prev, ...(response.data || [])]);
+        }
+        
+        // If we got fewer results than the limit, there are no more jobs
+        if (response.data.length < 10) {
+          setHasMore(false);
+        } else {
+          setHasMore(true);
+        }
       } else {
         setError(response.message || 'Failed to fetch jobs');
       }
@@ -43,7 +72,14 @@ export default function FindJobs() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
+  };
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchJobs(nextPage, false);
   };
 
   const sortedJobs = [...jobs].sort((a, b) => {
@@ -70,7 +106,10 @@ export default function FindJobs() {
     const matchesType = selectedType === "All" || job.type === selectedType;
     // Location filter
     const matchesLocation = selectedLocation === "All" || job.location === selectedLocation;
-    return matchesSearch && matchesType && matchesLocation;
+    // Category filter
+    const matchesCategory = selectedCategory === "All" || job.category === selectedCategory || job.category_name === selectedCategory;
+    
+    return matchesSearch && matchesType && matchesLocation && matchesCategory;
   });
 
   return (
@@ -138,6 +177,27 @@ export default function FindJobs() {
                   </div>
                 </div>
 
+                {/* Category Filter */}
+                <div className="space-y-3">
+                  <label className="block text-sm font-semibold text-slate-700">Category</label>
+                  <div className="relative">
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
+                    >
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                      <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Location Filter */}
                 <div className="space-y-3">
                   <label className="block text-sm font-semibold text-slate-700">Location</label>
@@ -187,6 +247,7 @@ export default function FindJobs() {
                       setSearchTerm("");
                       setSelectedType("All");
                       setSelectedLocation("All");
+                      setSelectedCategory("All");
                     }}
                     className="w-full px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors"
                   >
@@ -218,7 +279,7 @@ export default function FindJobs() {
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">Error loading jobs</h3>
                 <p className="text-slate-600 mb-6">{error}</p>
                 <button 
-                  onClick={fetchJobs}
+                  onClick={() => fetchJobs(1, true)}
                   className="px-6 py-3 bg-[#1B4696] text-white rounded-lg font-medium hover:bg-[#1B4696]/90 transition-colors"
                 >
                   Try Again
@@ -244,10 +305,21 @@ export default function FindJobs() {
                 </div>
 
                 {/* Load More Button */}
-                {filteredJobs.length > 0 && (
-                  <div className="text-center mt-12">
-                    <button className="px-8 py-3 bg-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-300 transition-colors">
-                      Load More Jobs
+                {hasMore && filteredJobs.length > 0 && (
+                  <div className="text-center mt-12 pb-12">
+                    <button 
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                      className={`px-12 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg active:scale-95 flex items-center gap-3 mx-auto ${loadingMore ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    >
+                      {loadingMore ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Indexing...
+                        </>
+                      ) : (
+                        'Explore More Opportunities'
+                      )}
                     </button>
                   </div>
                 )}
@@ -269,6 +341,7 @@ export default function FindJobs() {
                     setSearchTerm("");
                     setSelectedType("All");
                     setSelectedLocation("All");
+                    setSelectedCategory("All");
                   }}
                   className="px-6 py-2 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
                 >
