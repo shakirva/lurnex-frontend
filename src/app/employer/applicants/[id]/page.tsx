@@ -98,7 +98,7 @@ export default function JobApplicantsPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 p-4 text-center">
         <div className="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mb-6 text-rose-500">
-           <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+          <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
         </div>
         <h2 className="text-2xl font-black text-slate-900 mb-2">Error Accessing Applicants</h2>
         <p className="text-slate-500 mb-8 max-w-md">{error}</p>
@@ -123,9 +123,9 @@ export default function JobApplicantsPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-               <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider hidden sm:block">
-                 {applicants.length} Candidates
-               </span>
+              <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider hidden sm:block">
+                {applicants.length} Candidates
+              </span>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function JobApplicantsPage() {
         {applicants.length === 0 ? (
           <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-20 text-center">
             <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
-              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" strokeWidth={1.5}/></svg>
+              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" strokeWidth={1.5} /></svg>
             </div>
             <h3 className="text-2xl font-black text-slate-900">No applicants yet</h3>
             <p className="text-slate-400 mt-2 font-medium max-w-sm mx-auto">This job post hasn't received any applications. Share your listing to find top talent!</p>
@@ -154,7 +154,7 @@ export default function JobApplicantsPage() {
                     <div>
                       <h4 className="text-lg font-black text-slate-900">{a.applicant_name}</h4>
                       <p className="text-slate-500 font-medium text-sm flex items-center gap-2 mt-1">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002-2z" strokeWidth={2}/></svg>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002-2z" strokeWidth={2} /></svg>
                         {a.applicant_email}
                       </p>
                       <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-2">
@@ -165,30 +165,29 @@ export default function JobApplicantsPage() {
 
                   {/* Skills/Quick Details */}
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      a.status?.toLowerCase() === 'pending' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
-                      a.status?.toLowerCase() === 'shortlisted' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
-                      a.status?.toLowerCase() === 'hired' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
-                      'bg-rose-50 text-rose-600 border border-rose-100'
-                    }`}>
+                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${a.status?.toLowerCase() === 'pending' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
+                        a.status?.toLowerCase() === 'shortlisted' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
+                          a.status?.toLowerCase() === 'hired' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
+                            'bg-rose-50 text-rose-600 border border-rose-100'
+                      }`}>
                       {a.status}
                     </span>
                   </div>
 
                   {/* Actions */}
                   <div className="flex flex-wrap items-center gap-3 border-t lg:border-t-0 pt-6 lg:pt-0">
-                    <button 
+                    {/* <button 
                       onClick={() => handleDownload(a.id)}
                       className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-md active:scale-95"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                       Resume
-                    </button>
-                    
+                    </button> */}
+
                     <div className="h-10 w-px bg-slate-200 mx-2 hidden lg:block" />
 
                     <div className="flex items-center gap-2">
-                      <select 
+                      <select
                         value={a.status}
                         onChange={(e) => handleStatusUpdate(a.id, e.target.value)}
                         disabled={updatingId === a.id}
