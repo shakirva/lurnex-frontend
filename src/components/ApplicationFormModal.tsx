@@ -110,7 +110,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
 
           {/* Form */}
           <form onSubmit={handleFormSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8">
               {/* Left Column: Personal Info & Resume */}
               <div className="space-y-5">
                 <div>

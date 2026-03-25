@@ -385,7 +385,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                   </div>
 
                   {/* Payment Section */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+                  {/* <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
                     <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                       <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -394,7 +394,6 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     </h3>
 
                     <div className="space-y-6">
-                      {/* Top Row - QR Scanner Section */}
                       <div className="bg-white rounded-lg p-4">
                         <div className="flex justify-between items-center mb-4">
                           <p className="text-sm font-semibold text-slate-700">Scan & Pay</p>
@@ -408,7 +407,6 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
 
-                          {/* Left Side - QR Code */}
                           <div className="text-center">
                             <div className="bg-slate-100 w-48 h-48 mx-auto rounded-lg flex items-center justify-center mb-3 overflow-hidden">
                               <Image
@@ -422,13 +420,10 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                             <p className="text-xs text-slate-500">Scan QR Code to Pay</p>
                           </div>
 
-                          {/* Right Side - Subscription Plans */}
                           <div>
                             <p className="text-sm font-semibold text-slate-700 mb-3 text-center">Choose Your Subscription Plan</p>
 
-                            {/* Subscription Plans in Two Rows */}
                             <div className="space-y-3">
-                              {/* 3 Month Plan - Top Row */}
                               <div className="p-3 border border-blue-200 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/50">
                                 <div className="flex items-center justify-between">
                                   <div>
@@ -439,7 +434,6 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                                 </div>
                               </div>
 
-                              {/* 6 Month Plan - Bottom Row */}
                               <div className="p-3 border border-emerald-200 rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100/50">
                                 <div className="flex items-center justify-between">
                                   <div>
@@ -454,7 +448,6 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                         </div>
                       </div>
 
-                      {/* Bottom Row - Payment Receipt Upload */}
                       <div className="bg-white rounded-lg p-4">
                         <label className="block text-sm font-semibold text-slate-700 mb-2">
                           Payment Receipt Upload *
@@ -490,7 +483,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Form Actions */}
                   <div className="flex gap-4 pt-6">
