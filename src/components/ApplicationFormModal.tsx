@@ -176,8 +176,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
               </div>
 
               {/* Right Column: Payment */}
-              <div className="space-y-5">
-                {/* Payment Section */}
+              {/* <div className="space-y-5">
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200 h-full">
                   <h3 className="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
                     <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,7 +186,6 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
                   </h3>
 
                   <div className="space-y-4">
-                    {/* QR Code Section */}
                     <div className="bg-white rounded-lg p-3 text-center">
                       <p className="text-xs font-semibold text-slate-700 mb-2">Scan QR Code to Pay</p>
 
@@ -201,7 +199,6 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
                       <p className="text-xs text-slate-600 font-medium ">Amount: <span className="text-base font-bold text-green-600">₹500</span></p>
                     </div>
 
-                    {/* Payment Receipt Upload */}
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 mb-2">
                         Payment Receipt Upload *
@@ -234,7 +231,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Form Actions */}

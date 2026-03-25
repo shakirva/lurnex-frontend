@@ -6,6 +6,8 @@ interface PageProps {
   };
 }
 
-export default function JobDetailPage({ params }: PageProps) {
-  return <JobDetail jobId={params.id} />;
+export default async function JobDetailPage({ params }: PageProps) {
+  const { id } = await params;
+  return <JobDetail jobId={id} />;
 }
+
