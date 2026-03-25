@@ -75,7 +75,17 @@ export default function JobDetail({ jobId }: JobDetailProps) {
     }));
   };
 
+  const handleDemoPayment = () => {
+    const fakeReceipt = new File(["demo-content"], "demo-receipt.png", { type: "image/png" });
+    setFormData(prev => ({
+      ...prev,
+      paymentReceipt: fakeReceipt
+    }));
+    alert("🏦 DEMO: Payment simulated! You can now submit your application.");
+  };
+
   if (loading) {
+
     return (
       <div className="min-h-screen bg-slate-50 pt-24 flex items-center justify-center">
         <div className="text-center">
@@ -404,7 +414,18 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     <div className="space-y-6">
                       {/* Top Row - QR Scanner Section */}
                       <div className="bg-white rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-4">
+                          <p className="text-sm font-semibold text-slate-700">Scan & Pay</p>
+                          <button
+                            type="button"
+                            onClick={handleDemoPayment}
+                            className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
+                          >
+                            🚀 DEMO: SKIP PAYMENT
+                          </button>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+
                           {/* Left Side - QR Code */}
                           <div className="text-center">
                             <div className="bg-slate-100 w-48 h-48 mx-auto rounded-lg flex items-center justify-center mb-3 overflow-hidden">

@@ -82,27 +82,28 @@ export default function SubscriptionPlans() {
       return;
     }
 
-    const isDev = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
+    const isDemo = true; // Enable demo bypass
     
-    if (isDev) {
-      if (confirm(`Test Environment Detected: Would you like to bypass payment and activate the ${planId} plan immediately for testing?`)) {
+    if (isDemo) {
+      if (confirm(`Demo Mode: Would you like to bypass payment and activate the ${planId} plan immediately?`)) {
         try {
           setLoading(planId);
           const res = await apiService.activateTestSubscription(user!.id, planId);
           if (res.success) {
-            alert("Success! Your account has been promoted to " + planId.toUpperCase() + ". Please refresh to see premium content.");
+            alert("✨ Demo Mode: Plan Activated Successfully! You now have full access.");
             window.location.reload();
           } else {
-            alert("Error: " + res.message);
+            alert("Demo Activation Error: " + res.message);
           }
         } catch (err: any) {
-          alert("Activation failed: " + err.message);
+          alert("Demo Activation Failed: " + err.message);
         } finally {
           setLoading(null);
         }
         return;
       }
     }
+
     
     alert(`You selected the ${PLANS.find(p => p.id === planId)?.name}. Payment integration coming soon!`);
   };
