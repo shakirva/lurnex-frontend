@@ -541,6 +541,7 @@ export default function AdminDashboard() {
                         <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Email</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Phone</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Jobs Posted</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Joined</th>
                       </tr>
                     </thead>
@@ -566,6 +567,11 @@ export default function AdminDashboard() {
                                 : 'bg-slate-100 text-slate-500'
                             }`}>
                               {emp.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-flex items-center justify-center px-2.5 py-1 text-xs font-bold bg-[#1B4696]/10 text-[#1B4696] rounded-md min-w-[2.5rem]">
+                              {emp.job_posted_count || 0}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-slate-500">
