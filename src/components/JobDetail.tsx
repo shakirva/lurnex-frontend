@@ -19,10 +19,10 @@ export default function JobDetail({ jobId }: JobDetailProps) {
     name: '',
     email: '',
     phone: '',
-    resume: null as File | null,
     coverLetter: '',
     paymentReceipt: null as File | null
   });
+
   const router = useRouter();
 
   useEffect(() => {
@@ -34,11 +34,18 @@ export default function JobDetail({ jobId }: JobDetailProps) {
         if (response.success && response.data) {
           setJob(response.data);
         } else {
+          // Explicitly null if not found
           setJob(null);
         }
-      } catch (err) {
-        setJob(null);
+      } catch (err: any) {
+        console.error("❌ Job load failed:", err);
+        // If it's a true 404 or missing job, then set null
+        if (err.message?.includes('found')) {
+          setJob(null);
+        }
+        // Otherwise, it might be a network error - don't show "Not Found" yet
       }
+
       setLoading(false);
     };
     fetchJob();
@@ -361,32 +368,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      Resume *
-                    </label>
-                    <input
-                      type="file"
-                      name="resume"
-                      accept=".pdf,.doc,.docx"
-                      onChange={handleFileChange}
-                      required
-                      className="hidden"
-                      id="resume-upload"
-                    />
-                    <label
-                      htmlFor="resume-upload"
-                      className="cursor-pointer flex flex-col items-center"
-                    >
-                      <svg className="w-12 h-12 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                      <p className="text-slate-600 font-medium">
-                        {formData.resume ? formData.resume.name : 'Click to upload resume'}
-                      </p>
-                      <p className="text-sm text-slate-500 mt-1">PDF, DOC, DOCX (Max 5MB)</p>
-                    </label>
-                  </div>
+
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">

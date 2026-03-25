@@ -15,10 +15,10 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
     name: '',
     email: '',
     phone: '',
-    resume: null as File | null,
     coverLetter: '',
     paymentReceipt: null as File | null
   });
+
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,9 +53,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
       applicationData.append('applicant_phone', formData.phone);
       applicationData.append('cover_letter', formData.coverLetter);
 
-      if (formData.resume) {
-        applicationData.append('resume', formData.resume);
-      }
+
       if (formData.paymentReceipt) {
         applicationData.append('payment_file', formData.paymentReceipt);
       }
@@ -70,7 +68,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
           name: '',
           email: '',
           phone: '',
-          resume: null,
+
           coverLetter: '',
           paymentReceipt: null
         });
@@ -160,34 +158,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    Resume/CV *
-                  </label>
-                  <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center">
-                    <input
-                      type="file"
-                      name="resume"
-                      accept=".pdf,.doc,.docx"
-                      onChange={handleFileChange}
-                      required
-                      className="hidden"
-                      id="resume-upload"
-                    />
-                    <label
-                      htmlFor="resume-upload"
-                      className="cursor-pointer flex flex-col items-center"
-                    >
-                      <svg className="w-10 h-10 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                      <p className="text-sm text-slate-600 font-medium">
-                        {formData.resume ? formData.resume.name : 'Click to upload resume'}
-                      </p>
-                      <p className="text-xs text-slate-500 mt-1">PDF, DOC, DOCX (Max 5MB)</p>
-                    </label>
-                  </div>
-                </div>
+
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">
