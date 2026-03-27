@@ -166,21 +166,35 @@ export default function AdminDashboard() {
     setShowJobForm(true);
   };
 
-  const handleUpdateJob = (jobData: Omit<Job, 'id'>) => {
+  const handleUpdateJob = async (jobData: any) => {
     if (editingJob) {
-      const updatedJob: Job = {
-        ...jobData,
-        id: editingJob.id
-      };
-      setJobs(jobs.map(j => j.id === editingJob.id ? updatedJob : j));
-      setEditingJob(null);
-      setShowJobForm(false);
+      try {
+        const response = await apiService.updateJob(editingJob.id, jobData);
+        if (response.success) {
+          await fetchJobs();
+          setEditingJob(null);
+          setShowJobForm(false);
+        } else {
+          setError(response.message || 'Failed to update job');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to update job');
+      }
     }
   };
 
-  const handleDeleteJob = (jobId: number) => {
+  const handleDeleteJob = async (jobId: number) => {
     if (confirm('Are you sure you want to delete this job?')) {
-      setJobs(jobs.filter(j => j.id !== jobId));
+      try {
+        const response = await apiService.deleteJob(jobId);
+        if (response.success) {
+          await fetchJobs();
+        } else {
+          setError(response.message || 'Failed to delete job');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete job');
+      }
     }
   };
 
