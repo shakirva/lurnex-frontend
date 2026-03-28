@@ -433,6 +433,61 @@ class ApiService {
     return this.handleResponse(response);
   }
 
+  // Admin APIs
+  async getCandidates(): Promise<ApiResponse<any[]>> {
+    const response = await fetch(`${API_BASE_URL}/admin/users/candidates`, {
+      headers: this.getHeaders(),
+    });
+    return this.handleResponse<any[]>(response);
+  }
+
+  async createUserAdmin(userData: any): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/admin/users`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(userData),
+    });
+
+    return this.handleResponse(response);
+  }
+
+  async updateUserStatus(id: number, isActive: boolean): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/admin/users/${id}/status`, {
+      method: 'PUT',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ is_active: isActive }),
+    });
+
+    return this.handleResponse(response);
+  }
+
+  async deleteUser(id: number): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/admin/users/${id}`, {
+      method: "DELETE",
+      headers: this.getHeaders(),
+    });
+
+    return this.handleResponse(response);
+  }
+
+  async enableSubscription(userId: number, planSlug: string): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/admin/subscriptions/enable`, {
+      method: "POST",
+      headers: this.getHeaders(),
+      body: JSON.stringify({ userId, planSlug }),
+    });
+
+    return this.handleResponse(response);
+  }
+
+  async getUserSubscription(userId: number): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/subscription`, {
+      headers: this.getHeaders(),
+    });
+
+    return this.handleResponse(response);
+  }
+
   // Debug APIs
   async activateTestSubscription(userId: number, planSlug: string): Promise<ApiResponse> {
     const response = await fetch(`${API_BASE_URL}/debug/activate-subscription`, {
