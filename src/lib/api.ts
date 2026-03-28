@@ -34,6 +34,8 @@ export interface Job {
   posted?: string;
   created_at: string;
   is_masked?: boolean;
+  employer_email?: string;
+  employer_phone?: string;
 }
 
 // Transform backend job to frontend-compatible format
@@ -45,7 +47,9 @@ export const transformJob = (backendJob: any): Job => ({
   requirements: typeof backendJob.requirements === 'string' 
     ? backendJob.requirements.split(',').map((req: string) => req.trim())
     : (backendJob.requirements || []),
-  logo: backendJob.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(backendJob.company || 'Company')}&background=1B4696&color=fff&size=60`
+  logo: backendJob.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(backendJob.company || 'Company')}&background=1B4696&color=fff&size=60`,
+  employer_email: backendJob.employer_email,
+  employer_phone: backendJob.employer_phone
 });
 
 const formatDate = (dateString: string): string => {
