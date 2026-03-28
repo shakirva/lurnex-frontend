@@ -645,9 +645,7 @@ export default function AdminDashboard() {
                       <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-700 text-sm font-bold border border-indigo-100">
-                              {emp.first_name?.[0]?.toUpperCase()}{emp.last_name?.[0]?.toUpperCase()}
-                            </div>
+
                             <div className="flex flex-col">
                               <span className="font-bold text-slate-900">{emp.first_name} {emp.last_name}</span>
                               <span className="text-xs text-slate-500">@{emp.username}</span>
@@ -748,9 +746,7 @@ export default function AdminDashboard() {
                       <tr key={cand.id} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-teal-700 text-sm font-bold border border-teal-100">
-                              {(cand.first_name?.[0] || cand.username?.[0] || 'U').toUpperCase()}
-                            </div>
+
                             <div className="flex flex-col">
                               <span className="font-bold text-slate-900">{cand.first_name} {cand.last_name}</span>
                               <span className="text-xs text-slate-500">@{cand.username}</span>
@@ -779,11 +775,7 @@ export default function AdminDashboard() {
                             ) : (
                               <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 w-fit">Free Account</span>
                             )}
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-teal-600 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100 w-fit">
-                                  {cand.experience_years || 0} Years Exp
-                                </span>
-                            </div>
+
                           </div>
                         </td>
                         <td className="px-6 py-4 text-center">
@@ -800,7 +792,7 @@ export default function AdminDashboard() {
                               className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-[#1B4696] text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-indigo-700 transition-all shadow-sm shadow-blue-200"
                             >
                               <FaCreditCard className="w-3 h-3" />
-                              Grant Sub
+                              Sub
                             </button>
                             <button
                               onClick={() => handleUserStatusUpdate(cand.id, cand.is_active, 'candidate')}
