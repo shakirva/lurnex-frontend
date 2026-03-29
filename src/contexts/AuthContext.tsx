@@ -20,6 +20,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<boolean>;
   register: (userData: any) => Promise<any>;
   forgotPassword: (email: string) => Promise<boolean>;
+  resetPassword: (password: string, token: string) => Promise<boolean>;
   logout: () => Promise<void>;
   loading: boolean;
 }
@@ -101,6 +102,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetPassword = async (password: string, token: string): Promise<boolean> => {
+    try {
+      const response = await apiService.resetPassword(password, token);
+      return response.success;
+    } catch (error) {
+      console.error('Reset password error:', error);
+      return false;
+    }
+  };
+
   const logout = async (): Promise<void> => {
     try {
       await apiService.logout();
@@ -115,7 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, register, forgotPassword, logout, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, register, forgotPassword, resetPassword, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
