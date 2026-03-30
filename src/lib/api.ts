@@ -350,28 +350,6 @@ class ApiService {
     return this.handleResponse<any[]>(response);
   }
 
-  async downloadResume(id: number): Promise<void> {
-    const token = this.getAuthToken();
-    const url = `${API_BASE_URL}/applications/${id}/resume`;
-    
-    // For downloads with auth, we often need to fetch and build a blob or redirect if the backend handles it via query/cookie
-    // But since we use Bearer token, we'll try a fetch and then create a hidden link
-    const response = await fetch(url, {
-      headers: this.getHeaders(),
-    });
-
-    if (!response.ok) throw new Error('Failed to download resume');
-
-    const blob = await response.blob();
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = `resume-${id}.pdf`; // Fallback name
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(downloadUrl);
-  }
 
   // Contact APIs
   async submitContact(contactData: ContactMessage): Promise<ApiResponse> {

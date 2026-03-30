@@ -78,14 +78,6 @@ export default function JobApplicantsPage() {
     }
   };
 
-  const handleDownload = async (id: number) => {
-    try {
-      await apiService.downloadResume(id);
-    } catch (err: any) {
-      alert(err.message || "Failed to download resume");
-    }
-  };
-
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -176,14 +168,6 @@ export default function JobApplicantsPage() {
 
                   {/* Actions */}
                   <div className="flex flex-wrap items-center gap-3 border-t lg:border-t-0 pt-6 lg:pt-0">
-                    {/* <button 
-                      onClick={() => handleDownload(a.id)}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-md active:scale-95"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                      Resume
-                    </button> */}
-
                     <div className="h-10 w-px bg-slate-200 mx-2 hidden lg:block" />
 
                     <div className="flex items-center gap-2">

@@ -217,10 +217,10 @@ export default function EmployerApplicants({ jobId }: { jobId: number }) {
                       </div>
                     </div>
 
-                    <div className="pt-10 border-t border-slate-100 flex items-center gap-4">
+                    <div className="pt-10 border-t border-slate-100 flex flex-wrap items-center gap-4">
                       <a
                         href={`mailto:${selected.applicant_email}?subject=Application Status: ${selected.job_title}`}
-                        className="flex-1 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest text-center hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2"
+                        className="flex-1 min-w-[200px] py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest text-center hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeWidth={2}/></svg>
                         Initiate Contact

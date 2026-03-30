@@ -68,7 +68,6 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
           name: '',
           email: '',
           phone: '',
-
           coverLetter: '',
           paymentReceipt: null
         });
@@ -173,6 +172,7 @@ export default function ApplicationFormModal({ job, isOpen, onClose }: Applicati
                     placeholder="Tell us why you're interested in this position..."
                   />
                 </div>
+
               </div>
 
               {/* Right Column: Payment */}

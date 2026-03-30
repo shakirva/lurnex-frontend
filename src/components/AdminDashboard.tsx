@@ -8,41 +8,25 @@ import JobForm from "./JobForm";
 import {
   FaBriefcase,
   FaCheckCircle,
-  FaUsers,
   FaPlus,
   FaEdit,
   FaTrash,
-  FaEye,
   FaBan,
-  FaDownload,
   FaFileAlt,
   FaCreditCard
 } from "react-icons/fa";
 
 
-interface Application {
-  id: number;
-  jobId: number;
-  jobTitle: string;
-  candidateName: string;
-  email: string;
-  phone: string;
-  appliedDate: string;
-  resume: string;
-  coverLetter: string;
-  status: 'pending' | 'reviewed' | 'shortlisted' | 'rejected';
-  paymentFile?: string;
-}
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [applications, setApplications] = useState<Application[]>([]);
+
   const [showJobForm, setShowJobForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'jobs' | 'applications' | 'messages' | 'employers' | 'candidates'>('jobs');
+  const [activeTab, setActiveTab] = useState<'jobs' | 'messages' | 'employers' | 'candidates'>('jobs');
 
   const [contactMessages, setContactMessages] = useState<any[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
@@ -62,7 +46,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchJobs();
-    fetchApplications();
+
     fetchContactMessages();
     fetchEmployers();
     fetchCandidates();
@@ -82,22 +66,6 @@ export default function AdminDashboard() {
     }
   }, [activeTab]);
 
-  // Fetch applications for stats and table
-  const fetchApplications = async () => {
-    try {
-      const response = await apiService.getApplications();
-      // If response.data is an object with applications property, use it
-      if (response.success && response.data && typeof response.data === 'object' && 'applications' in response.data) {
-        setApplications((response.data as any).applications);
-      } else if (response.success && Array.isArray(response.data)) {
-        setApplications(response.data);
-      } else {
-        setApplications([]);
-      }
-    } catch (err) {
-      setApplications([]);
-    }
-  };
 
   const fetchContactMessages = async () => {
     setLoadingMessages(true);
@@ -300,28 +268,6 @@ export default function AdminDashboard() {
     router.push('/admin/login');
   };
 
-  const handleApplicationStatusChange = (applicationId: number, newStatus: Application['status']) => {
-    setApplications(prev =>
-      prev.map(app =>
-        app.id === applicationId ? { ...app, status: newStatus } : app
-      )
-    );
-  };
-
-  const getStatusColor = (status: Application['status']) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'reviewed':
-        return 'bg-blue-100 text-blue-800';
-      case 'shortlisted':
-        return 'bg-green-100 text-green-800';
-      case 'rejected':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -355,11 +301,6 @@ export default function AdminDashboard() {
             <div className="text-slate-500">Total Jobs</div>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center py-6">
-            <FaUsers className="w-8 h-8 text-[#2FBDB9] mb-2" />
-            <div className="text-2xl font-bold text-slate-900">{applications.length}</div>
-            <div className="text-slate-500">Total Applications</div>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center py-6">
             <FaFileAlt className="w-8 h-8 text-[#F59E42] mb-2" />
             <div className="text-2xl font-bold text-slate-900">{contactMessages.length}</div>
             <div className="text-slate-500">Total Messages</div>
@@ -378,15 +319,6 @@ export default function AdminDashboard() {
                   }`}
               >
                 Job Vacancies
-              </button>
-              <button
-                onClick={() => setActiveTab('applications')}
-                className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'applications'
-                  ? 'border-[#1B4696] text-[#1B4696]'
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-              >
-                Applications
               </button>
               <button
                 onClick={() => setActiveTab('messages')}
@@ -537,76 +469,6 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Applications Table */}
-        {activeTab === 'applications' && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-            <div className="px-6 py-4 border-b border-slate-200">
-              <h2 className="text-lg font-semibold text-slate-900">Job Applications</h2>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-slate-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[180px]">Candidate</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[180px]">Job Position</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[180px]">Contact</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[120px]">Applied</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[220px]">Payment</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[220px]">Cover Letter</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider min-w-[120px]">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-slate-200">
-                  {applications.map((application) => (
-                    <tr key={application.id} className="hover:bg-slate-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                            {application.candidateName
-                              ? application.candidateName.split(' ').map(n => n[0]).join('')
-                              : 'NA'}
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-slate-900">{application.candidateName}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-900">{application.jobTitle}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-900">{application.email}</div>
-                        <div className="text-sm text-slate-500">{application.phone}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{application.appliedDate}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {application.paymentFile ? (
-                          <a
-                            href={`http://localhost:5000/uploads/payments/${application.paymentFile}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-900 flex items-center gap-1"
-                          >
-                            <FaDownload className="w-3 h-3" />
-                            Download Payment
-                          </a>
-                        ) : (
-                          <span className="text-slate-400">No Payment</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900 max-w-xs truncate" title={application.coverLetter}>
-                        {application.coverLetter ? application.coverLetter : <span className="text-slate-400">No cover letter</span>}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {/* Future actions: status change, delete, etc. */}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
 
         {/* Employer Details */}
         {activeTab === 'employers' && (
