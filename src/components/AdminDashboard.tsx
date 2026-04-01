@@ -242,33 +242,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUpdateApplicationStatus = async (applicationId: any, newStatus: string) => {
-    if (!applicationId) return;
-    
-    try {
-      const response = await apiService.updateApplicationStatus(Number(applicationId), newStatus);
-      if (response.success) {
-        // Update the main applications list
-        setApplications(prev => prev.map(app => 
-          Number(app.id) === Number(applicationId) ? { ...app, status: newStatus } : app
-        ));
-        
-        // Update the currently selected application in the modal
-        setSelectedApplication((prev: any) => {
-          if (prev && Number(prev.id) === Number(applicationId)) {
-            return { ...prev, status: newStatus };
-          }
-          return prev;
-        });
-      } else {
-        alert(response.message || 'Failed to update application status');
-      }
-    } catch (err: any) {
-      console.error('Status update failed:', err);
-      alert(err.message || 'An error occurred while updating status');
-    }
-  };
-
   const handleCloseForm = () => {
     setShowJobForm(false);
     setEditingJob(null);
@@ -589,7 +562,6 @@ export default function AdminDashboard() {
                     <tr>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Identify</th>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Organization & Contact</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                       <th className="px-6 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest">Jobs</th>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
                     </tr>
@@ -611,24 +583,18 @@ export default function AdminDashboard() {
                           <div className="font-medium text-slate-900">{emp.company_name || '—'}</div>
                           <div className="text-xs text-slate-400 mt-0.5">{emp.email}</div>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${emp.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
-                            }`}>
-                            {emp.is_active ? '● Active' : '○ Inactive'}
-                          </span>
-                        </td>
                         <td className="px-6 py-4 text-center">
                           <span className="text-sm font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full">{emp.job_posted_count || 0}</span>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <button
-                               onClick={() => handleDeleteUser(emp.id, 'employer')}
-                               className="w-9 h-9 flex items-center justify-center border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
-                               title="Delete Permanently"
-                             >
-                               <FaTrash className="w-4 h-4" />
-                             </button>
+                              onClick={() => handleDeleteUser(emp.id, 'employer')}
+                              className="w-9 h-9 flex items-center justify-center border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                              title="Delete Permanently"
+                            >
+                              <FaTrash className="w-4 h-4" />
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -793,7 +759,6 @@ export default function AdminDashboard() {
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Candidate</th>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Job Title</th>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Company</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Applied on</th>
                       <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
                     </tr>
@@ -813,16 +778,6 @@ export default function AdminDashboard() {
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-700">
                           <div className="text-slate-600">{app.company_name || 'N/A'}</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                            app.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                            app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-100' :
-                            app.status === 'Reviewing' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
-                            'bg-amber-50 text-amber-700 border border-amber-100'
-                          }`}>
-                            {app.status || 'Pending'}
-                          </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
                           {new Date(app.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -1022,129 +977,95 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
- 
-       {/* Application Detail Modal */}
-       {showApplicationModal && selectedApplication && (
-         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-fadeIn">
-             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-               <h3 className="text-xl font-bold text-slate-900">Application Review</h3>
-               <button
-                 onClick={() => setShowApplicationModal(false)}
-                 className="text-slate-400 hover:text-slate-600 transition-colors"
-               >
-                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                 </svg>
-               </button>
-             </div>
-             <div className="p-8 max-h-[80vh] overflow-y-auto">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                 {/* Left Column: Basic Info */}
-                 <div className="space-y-8">
-                   <div>
-                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Info</h4>
-                     <p className="text-xl font-black text-slate-900">{selectedApplication.applicant_name}</p>
-                     <p className="text-slate-500 font-medium text-sm">{selectedApplication.applicant_email}</p>
-                     {selectedApplication.applicant_phone && (
-                       <p className="text-slate-400 text-xs mt-1">Contact: {selectedApplication.applicant_phone}</p>
-                     )}
-                   </div>
- 
-                   <div>
-                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Applied For</h4>
-                     <p className="text-lg font-bold text-indigo-900 leading-tight">{selectedApplication.job_title || 'General Application'}</p>
-                     <p className="text-slate-600 font-bold text-xs uppercase tracking-wider mt-1">{selectedApplication.company_name || 'Direct'}</p>
-                   </div>
- 
-                   <div className="pt-6 border-t border-slate-100 grid grid-cols-2 gap-4">
-                     <div>
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Status</h4>
-                       <span className={`inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
-                         selectedApplication.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
-                         selectedApplication.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border-rose-100' :
-                         selectedApplication.status === 'Reviewing' ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                         'bg-amber-50 text-amber-700 border-amber-100'
-                       }`}>
-                         {selectedApplication.status || 'Pending'}
-                       </span>
-                     </div>
-                     <div>
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Submission</h4>
-                       <p className="text-[11px] font-bold text-slate-700">
-                         {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                       </p>
-                     </div>
-                   </div>
-                 </div>
- 
-                 {/* Right Column: Interaction */}
-                 <div className="space-y-8">
-                   {selectedApplication.cover_letter && (
-                     <div>
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Message from Candidate</h4>
-                       <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-600 text-sm leading-relaxed max-h-[160px] overflow-y-auto italic">
-                         "{selectedApplication.cover_letter}"
-                       </div>
-                     </div>
-                   )}
- 
-                   {selectedApplication.resume_url && (
-                     <div>
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Documents</h4>
-                       <a 
-                         href={selectedApplication.resume_url} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-2xl group hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
-                       >
-                         <div className="flex items-center gap-3">
-                           <FaFileAlt className="w-4 h-4" />
-                           <span className="text-xs font-black uppercase tracking-widest">Candidate Resume</span>
-                         </div>
-                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                         </svg>
-                       </a>
-                     </div>
-                   )}
- 
-                   <div className="pt-8 border-t border-slate-100">
-                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Update Status</h4>
-                     <div className="grid grid-cols-2 gap-3">
-                       {['Pending', 'Reviewing', 'Accepted', 'Rejected'].map((status) => (
-                         <button
-                           key={status}
-                           onClick={() => handleUpdateApplicationStatus(selectedApplication.id, status)}
-                           className={`py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border-2 transition-all ${
-                             selectedApplication.status === status
-                               ? status === 'Accepted' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-lg shadow-emerald-700/10' :
-                                 status === 'Rejected' ? 'bg-rose-50 text-rose-700 border-rose-200 shadow-lg shadow-rose-700/10' :
-                                 status === 'Reviewing' ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-lg shadow-blue-700/10' :
-                                 'bg-amber-50 text-amber-700 border-amber-200 shadow-lg shadow-amber-700/10'
-                               : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600'
-                           }`}
-                         >
-                           {status}
-                         </button>
-                       ))}
-                     </div>
-                   </div>
-                 </div>
-               </div>
- 
-               <div className="mt-12 flex justify-center">
-                 <button
-                   onClick={() => setShowApplicationModal(false)}
-                   className="px-12 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 active:scale-95"
-                 >
-                   Close Record
-                 </button>
-               </div>
-             </div>
-           </div>
-         </div>
-       )}
+
+      {/* Application Detail Modal */}
+      {showApplicationModal && selectedApplication && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-fadeIn">
+            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+              <h3 className="text-xl font-bold text-slate-900">Application Review</h3>
+              <button
+                onClick={() => setShowApplicationModal(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-8 max-h-[80vh] overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                {/* Left Column: Basic Info */}
+                <div className="space-y-8">
+                  <div>
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Info</h4>
+                    <p className="text-xl font-black text-slate-900">{selectedApplication.applicant_name}</p>
+                    <p className="text-slate-500 font-medium text-sm">{selectedApplication.applicant_email}</p>
+                    {selectedApplication.applicant_phone && (
+                      <p className="text-slate-400 text-xs mt-1">Contact: {selectedApplication.applicant_phone}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Applied For</h4>
+                    <p className="text-lg font-bold text-indigo-900 leading-tight">{selectedApplication.job_title || 'General Application'}</p>
+                    <p className="text-slate-600 font-bold text-xs uppercase tracking-wider mt-1">{selectedApplication.company_name || 'Direct'}</p>
+                  </div>
+
+                  <div className="pt-6 border-t border-slate-100">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Submission Date</h4>
+                    <p className="text-sm font-bold text-slate-700">
+                      {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Column: Interaction */}
+                <div className="space-y-8">
+                  {selectedApplication.cover_letter && (
+                    <div>
+                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Message from Candidate</h4>
+                      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-600 text-sm leading-relaxed max-h-[160px] overflow-y-auto italic">
+                        "{selectedApplication.cover_letter}"
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedApplication.resume_url && (
+                    <div>
+                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Documents</h4>
+                      <a
+                        href={selectedApplication.resume_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-2xl group hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FaFileAlt className="w-4 h-4" />
+                          <span className="text-xs font-black uppercase tracking-widest">Candidate Resume</span>
+                        </div>
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </a>
+                    </div>
+                  )}
+
+                </div>
+              </div>
+
+              <div className="mt-12 flex justify-center">
+                <button
+                  onClick={() => setShowApplicationModal(false)}
+                  className="px-12 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 active:scale-95"
+                >
+                  Close Record
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
     </div>
