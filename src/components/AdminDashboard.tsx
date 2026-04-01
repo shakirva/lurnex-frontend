@@ -13,7 +13,8 @@ import {
   FaTrash,
   FaBan,
   FaFileAlt,
-  FaCreditCard
+  FaCreditCard,
+  FaClipboardList
 } from "react-icons/fa";
 
 
@@ -26,7 +27,7 @@ export default function AdminDashboard() {
   const [showJobForm, setShowJobForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'jobs' | 'messages' | 'employers' | 'candidates'>('jobs');
+  const [activeTab, setActiveTab] = useState<'jobs' | 'messages' | 'employers' | 'candidates' | 'applications'>('jobs');
 
   const [contactMessages, setContactMessages] = useState<any[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
@@ -34,6 +35,10 @@ export default function AdminDashboard() {
   const [loadingEmployers, setLoadingEmployers] = useState(false);
   const [candidates, setCandidates] = useState<any[]>([]);
   const [loadingCandidates, setLoadingCandidates] = useState(false);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loadingApplications, setLoadingApplications] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState<any>(null);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
 
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
@@ -50,6 +55,7 @@ export default function AdminDashboard() {
     fetchContactMessages();
     fetchEmployers();
     fetchCandidates();
+    fetchApplications();
   }, []);
 
 
@@ -63,6 +69,9 @@ export default function AdminDashboard() {
     }
     if (activeTab === 'candidates') {
       fetchCandidates();
+    }
+    if (activeTab === 'applications') {
+      fetchApplications();
     }
   }, [activeTab]);
 
@@ -122,6 +131,21 @@ export default function AdminDashboard() {
       setCandidates([]);
     }
     setLoadingCandidates(false);
+  };
+
+  const fetchApplications = async () => {
+    setLoadingApplications(true);
+    try {
+      const response = await apiService.getApplications();
+      if (response.success && response.data) {
+        setApplications(response.data);
+      } else {
+        setApplications([]);
+      }
+    } catch (err) {
+      setApplications([]);
+    }
+    setLoadingApplications(false);
   };
 
 
@@ -323,6 +347,11 @@ export default function AdminDashboard() {
             <div className="text-2xl font-bold text-slate-900">{contactMessages.length}</div>
             <div className="text-slate-500">Total Messages</div>
           </div>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center py-6">
+            <FaClipboardList className="w-8 h-8 text-[#2FBDB9] mb-2" />
+            <div className="text-2xl font-bold text-slate-900">{applications.length}</div>
+            <div className="text-slate-500">Total Applications</div>
+          </div>
         </div>
 
         {/* Tab Navigation */}
@@ -364,6 +393,15 @@ export default function AdminDashboard() {
                   }`}
               >
                 Candidates
+              </button>
+              <button
+                onClick={() => setActiveTab('applications')}
+                className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'applications'
+                  ? 'border-[#1B4696] text-[#1B4696]'
+                  : 'border-transparent text-slate-500 hover:text-slate-700'
+                  }`}
+              >
+                Applications
               </button>
             </div>
           </div>
@@ -629,8 +667,6 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
 
-
-
                   <tbody className="bg-white divide-y divide-slate-200">
                     {candidates.map((cand: any) => (
                       <tr key={cand.id} className="hover:bg-slate-50 transition-colors">
@@ -707,6 +743,87 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
 
+                </table>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Application Details */}
+        {activeTab === 'applications' && (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">Job Applications</h2>
+                <p className="text-sm text-slate-500 mt-0.5">View and track all job applications</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-slate-500">{applications.length} total</span>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              {loadingApplications ? (
+                <div className="p-8 text-center text-slate-500">Loading...</div>
+              ) : applications.length === 0 ? (
+                <div className="p-10 text-center">
+                  <p className="text-slate-400">No applications found.</p>
+                </div>
+              ) : (
+                <table className="w-full">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Candidate</th>
+                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Job Title</th>
+                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Company</th>
+                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Applied on</th>
+                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="bg-white divide-y divide-slate-200">
+                    {applications.map((app: any) => (
+                      <tr key={app.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-slate-900">{app.applicant_name}</span>
+                            <span className="text-xs text-slate-500">{app.applicant_email}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-700">
+                          <div className="font-medium text-slate-900">{app.job_title || 'Unknown Job'}</div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-700">
+                          <div className="text-slate-600">{app.company_name || 'N/A'}</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                            app.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
+                            app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-100' :
+                            app.status === 'Reviewing' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                            'bg-amber-50 text-amber-700 border border-amber-100'
+                          }`}>
+                            {app.status || 'Pending'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
+                          {new Date(app.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => {
+                              setSelectedApplication(app);
+                              setShowApplicationModal(true);
+                            }}
+                            className="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors"
+                          >
+                            View Details
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               )}
             </div>
@@ -888,6 +1005,101 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+ 
+       {/* Application Detail Modal */}
+       {showApplicationModal && selectedApplication && (
+         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden">
+             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+               <h3 className="text-xl font-bold text-slate-900">Application Details</h3>
+               <button
+                 onClick={() => setShowApplicationModal(false)}
+                 className="text-slate-400 hover:text-slate-600 transition-colors"
+               >
+                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                 </svg>
+               </button>
+             </div>
+             <div className="p-8 max-h-[80vh] overflow-y-auto">
+               <div className="flex flex-col md:flex-row gap-8">
+                 {/* Left Column: Basic Info */}
+                 <div className="flex-1 space-y-6">
+                   <div>
+                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Candidate</h4>
+                     <p className="text-lg font-bold text-slate-900">{selectedApplication.applicant_name}</p>
+                     <p className="text-slate-500 font-medium">{selectedApplication.applicant_email}</p>
+                     {selectedApplication.applicant_phone && (
+                       <p className="text-slate-500 text-sm">Phone: {selectedApplication.applicant_phone}</p>
+                     )}
+                   </div>
+ 
+                   <div>
+                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Position</h4>
+                     <p className="text-lg font-bold text-indigo-900">{selectedApplication.job_title || 'N/A'}</p>
+                     <p className="text-slate-600 font-medium">{selectedApplication.company_name || 'N/A'}</p>
+                   </div>
+ 
+                   <div className="flex gap-4">
+                     <div>
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Status</h4>
+                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
+                         selectedApplication.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700' :
+                         selectedApplication.status === 'Rejected' ? 'bg-rose-50 text-rose-700' :
+                         'bg-blue-50 text-blue-700'
+                       }`}>
+                         {selectedApplication.status || 'Pending'}
+                       </span>
+                     </div>
+                     <div>
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Applied Date</h4>
+                       <p className="text-sm font-bold text-slate-700">
+                         {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+ 
+                 {/* Right Column: Experience/Resume info if available */}
+                 <div className="flex-1">
+                   {selectedApplication.cover_letter && (
+                     <div className="h-full">
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Message / Cover Letter</h4>
+                       <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-slate-700 text-sm leading-relaxed max-h-[300px] overflow-y-auto">
+                         {selectedApplication.cover_letter}
+                       </div>
+                     </div>
+                   )}
+ 
+                   {selectedApplication.resume_url && (
+                     <div className="mt-4">
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Attachments</h4>
+                       <a 
+                         href={selectedApplication.resume_url} 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors gap-2"
+                       >
+                         <FaFileAlt className="w-4 h-4" />
+                         View Resume
+                       </a>
+                     </div>
+                   )}
+                 </div>
+               </div>
+ 
+               <div className="mt-10 pt-6 border-t border-slate-100 flex justify-end gap-3">
+                 <button
+                   onClick={() => setShowApplicationModal(false)}
+                   className="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10"
+                 >
+                   Close
+                 </button>
+               </div>
+             </div>
+           </div>
+         </div>
+       )}
 
 
     </div>
