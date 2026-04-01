@@ -242,19 +242,30 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUpdateApplicationStatus = async (applicationId: number, status: string) => {
+  const handleUpdateApplicationStatus = async (applicationId: any, newStatus: string) => {
+    if (!applicationId) return;
+    
     try {
-      const response = await apiService.updateApplicationStatus(applicationId, status);
+      const response = await apiService.updateApplicationStatus(Number(applicationId), newStatus);
       if (response.success) {
-        setApplications(prev => prev.map(app => app.id === applicationId ? { ...app, status } : app));
-        if (selectedApplication?.id === applicationId) {
-          setSelectedApplication((prev: any) => ({ ...prev, status }));
-        }
+        // Update the main applications list
+        setApplications(prev => prev.map(app => 
+          Number(app.id) === Number(applicationId) ? { ...app, status: newStatus } : app
+        ));
+        
+        // Update the currently selected application in the modal
+        setSelectedApplication((prev: any) => {
+          if (prev && Number(prev.id) === Number(applicationId)) {
+            return { ...prev, status: newStatus };
+          }
+          return prev;
+        });
       } else {
         alert(response.message || 'Failed to update application status');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Status update failed:', err);
+      alert(err.message || 'An error occurred while updating status');
     }
   };
 
