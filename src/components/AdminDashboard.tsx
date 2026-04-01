@@ -242,6 +242,22 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUpdateApplicationStatus = async (applicationId: number, status: string) => {
+    try {
+      const response = await apiService.updateApplicationStatus(applicationId, status);
+      if (response.success) {
+        setApplications(prev => prev.map(app => app.id === applicationId ? { ...app, status } : app));
+        if (selectedApplication?.id === applicationId) {
+          setSelectedApplication((prev: any) => ({ ...prev, status }));
+        }
+      } else {
+        alert(response.message || 'Failed to update application status');
+      }
+    } catch (err) {
+      console.error('Status update failed:', err);
+    }
+  };
+
   const handleCloseForm = () => {
     setShowJobForm(false);
     setEditingJob(null);
@@ -596,22 +612,12 @@ export default function AdminDashboard() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() => handleUserStatusUpdate(emp.id, emp.is_active, 'employer')}
-                              className={`w-9 h-9 flex items-center justify-center rounded-lg border transition-all ${emp.is_active
-                                ? 'border-orange-200 text-orange-600 hover:bg-orange-50'
-                                : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50'
-                                }`}
-                              title={emp.is_active ? "Deactivate Account" : "Activate Account"}
-                            >
-                              {emp.is_active ? <FaBan className="w-4 h-4" /> : <FaCheckCircle className="w-4 h-4" />}
-                            </button>
-                            <button
-                              onClick={() => handleDeleteUser(emp.id, 'employer')}
-                              className="w-9 h-9 flex items-center justify-center border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
-                              title="Delete Permanently"
-                            >
-                              <FaTrash className="w-4 h-4" />
-                            </button>
+                               onClick={() => handleDeleteUser(emp.id, 'employer')}
+                               className="w-9 h-9 flex items-center justify-center border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                               title="Delete Permanently"
+                             >
+                               <FaTrash className="w-4 h-4" />
+                             </button>
                           </div>
                         </td>
                       </tr>
@@ -1009,9 +1015,9 @@ export default function AdminDashboard() {
        {/* Application Detail Modal */}
        {showApplicationModal && selectedApplication && (
          <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden">
+           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-fadeIn">
              <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-               <h3 className="text-xl font-bold text-slate-900">Application Details</h3>
+               <h3 className="text-xl font-bold text-slate-900">Application Review</h3>
                <button
                  onClick={() => setShowApplicationModal(false)}
                  className="text-slate-400 hover:text-slate-600 transition-colors"
@@ -1022,78 +1028,106 @@ export default function AdminDashboard() {
                </button>
              </div>
              <div className="p-8 max-h-[80vh] overflow-y-auto">
-               <div className="flex flex-col md:flex-row gap-8">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                  {/* Left Column: Basic Info */}
-                 <div className="flex-1 space-y-6">
+                 <div className="space-y-8">
                    <div>
-                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Candidate</h4>
-                     <p className="text-lg font-bold text-slate-900">{selectedApplication.applicant_name}</p>
-                     <p className="text-slate-500 font-medium">{selectedApplication.applicant_email}</p>
+                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Info</h4>
+                     <p className="text-xl font-black text-slate-900">{selectedApplication.applicant_name}</p>
+                     <p className="text-slate-500 font-medium text-sm">{selectedApplication.applicant_email}</p>
                      {selectedApplication.applicant_phone && (
-                       <p className="text-slate-500 text-sm">Phone: {selectedApplication.applicant_phone}</p>
+                       <p className="text-slate-400 text-xs mt-1">Contact: {selectedApplication.applicant_phone}</p>
                      )}
                    </div>
  
                    <div>
-                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Position</h4>
-                     <p className="text-lg font-bold text-indigo-900">{selectedApplication.job_title || 'N/A'}</p>
-                     <p className="text-slate-600 font-medium">{selectedApplication.company_name || 'N/A'}</p>
+                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Applied For</h4>
+                     <p className="text-lg font-bold text-indigo-900 leading-tight">{selectedApplication.job_title || 'General Application'}</p>
+                     <p className="text-slate-600 font-bold text-xs uppercase tracking-wider mt-1">{selectedApplication.company_name || 'Direct'}</p>
                    </div>
  
-                   <div className="flex gap-4">
+                   <div className="pt-6 border-t border-slate-100 grid grid-cols-2 gap-4">
                      <div>
                        <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Status</h4>
-                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
-                         selectedApplication.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700' :
-                         selectedApplication.status === 'Rejected' ? 'bg-rose-50 text-rose-700' :
-                         'bg-blue-50 text-blue-700'
+                       <span className={`inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
+                         selectedApplication.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
+                         selectedApplication.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border-rose-100' :
+                         selectedApplication.status === 'Reviewing' ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                         'bg-amber-50 text-amber-700 border-amber-100'
                        }`}>
                          {selectedApplication.status || 'Pending'}
                        </span>
                      </div>
                      <div>
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Applied Date</h4>
-                       <p className="text-sm font-bold text-slate-700">
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Submission</h4>
+                       <p className="text-[11px] font-bold text-slate-700">
                          {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                        </p>
                      </div>
                    </div>
                  </div>
  
-                 {/* Right Column: Experience/Resume info if available */}
-                 <div className="flex-1">
+                 {/* Right Column: Interaction */}
+                 <div className="space-y-8">
                    {selectedApplication.cover_letter && (
-                     <div className="h-full">
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Message / Cover Letter</h4>
-                       <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-slate-700 text-sm leading-relaxed max-h-[300px] overflow-y-auto">
-                         {selectedApplication.cover_letter}
+                     <div>
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Message from Candidate</h4>
+                       <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-600 text-sm leading-relaxed max-h-[160px] overflow-y-auto italic">
+                         "{selectedApplication.cover_letter}"
                        </div>
                      </div>
                    )}
  
                    {selectedApplication.resume_url && (
-                     <div className="mt-4">
-                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Attachments</h4>
+                     <div>
+                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Documents</h4>
                        <a 
                          href={selectedApplication.resume_url} 
                          target="_blank" 
                          rel="noopener noreferrer"
-                         className="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors gap-2"
+                         className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-2xl group hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
                        >
-                         <FaFileAlt className="w-4 h-4" />
-                         View Resume
+                         <div className="flex items-center gap-3">
+                           <FaFileAlt className="w-4 h-4" />
+                           <span className="text-xs font-black uppercase tracking-widest">Candidate Resume</span>
+                         </div>
+                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                         </svg>
                        </a>
                      </div>
                    )}
+ 
+                   <div className="pt-8 border-t border-slate-100">
+                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Update Status</h4>
+                     <div className="grid grid-cols-2 gap-3">
+                       {['Pending', 'Reviewing', 'Accepted', 'Rejected'].map((status) => (
+                         <button
+                           key={status}
+                           onClick={() => handleUpdateApplicationStatus(selectedApplication.id, status)}
+                           className={`py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border-2 transition-all ${
+                             selectedApplication.status === status
+                               ? status === 'Accepted' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-lg shadow-emerald-700/10' :
+                                 status === 'Rejected' ? 'bg-rose-50 text-rose-700 border-rose-200 shadow-lg shadow-rose-700/10' :
+                                 status === 'Reviewing' ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-lg shadow-blue-700/10' :
+                                 'bg-amber-50 text-amber-700 border-amber-200 shadow-lg shadow-amber-700/10'
+                               : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600'
+                           }`}
+                         >
+                           {status}
+                         </button>
+                       ))}
+                     </div>
+                   </div>
                  </div>
                </div>
  
-               <div className="mt-10 pt-6 border-t border-slate-100 flex justify-end gap-3">
+               <div className="mt-12 flex justify-center">
                  <button
                    onClick={() => setShowApplicationModal(false)}
-                   className="px-6 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10"
+                   className="px-12 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 active:scale-95"
                  >
-                   Close
+                   Close Record
                  </button>
                </div>
              </div>

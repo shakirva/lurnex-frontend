@@ -22,7 +22,9 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
     logo: '',
     category: 'General',
     foodAccommodation: '',
-    gender: ''
+    gender: '',
+    employer_email: '',
+    employer_phone: ''
   });
 
   const [requirementInput, setRequirementInput] = useState('');
@@ -41,7 +43,9 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
         logo: job.logo ?? '',
         category: job.category ?? 'General',
         foodAccommodation: job.foodAccommodation ?? '',
-        gender: job.gender ?? ''
+        gender: job.gender ?? '',
+        employer_email: job.employer_email ?? '',
+        employer_phone: job.employer_phone ?? ''
       });
       // Set requirements input as comma-separated string for editing
       setRequirementInput((job.requirements ?? []).join(', '));
@@ -128,6 +132,35 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   required
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
                   placeholder="e.g., Acme Corp, Google, Lurnex"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Company Email
+                </label>
+                <input
+                  type="email"
+                  name="employer_email"
+                  value={formData.employer_email}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  placeholder="e.g., hr@company.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Contact Number
+                </label>
+                <input
+                  type="text"
+                  name="employer_phone"
+                  value={formData.employer_phone}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  placeholder="e.g., +1 234 567 890"
                 />
               </div>
             </div>

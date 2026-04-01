@@ -82,30 +82,7 @@ export default function SubscriptionPlans() {
       return;
     }
 
-    const isDemo = true; // Enable demo bypass
-    
-    if (isDemo) {
-      if (confirm(`Demo Mode: Would you like to bypass payment and activate the ${planId} plan immediately?`)) {
-        try {
-          setLoading(planId);
-          const res = await apiService.activateTestSubscription(user!.id, planId);
-          if (res.success) {
-            alert("✨ Demo Mode: Plan Activated Successfully! You now have full access.");
-            window.location.reload();
-          } else {
-            alert("Demo Activation Error: " + res.message);
-          }
-        } catch (err: any) {
-          alert("Demo Activation Failed: " + err.message);
-        } finally {
-          setLoading(null);
-        }
-        return;
-      }
-    }
-
-    
-    alert(`You selected the ${PLANS.find(p => p.id === planId)?.name}. Payment integration coming soon!`);
+    alert(`Coming Soon: The payment gateway is currently under integration. Please contact Lurnex admin to manually enable the ${PLANS.find(p => p.id === planId)?.name} for your account.`);
   };
 
   return (

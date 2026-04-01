@@ -44,6 +44,8 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     requirements: '',
     category: '',
     gender: 'Any',
+    employer_email: '',
+    employer_phone: '',
   });
 
   useEffect(() => {
@@ -86,6 +88,8 @@ export default function PostJob({ jobId }: { jobId?: number }) {
           requirements: res.data.requirements?.join('\n') || '',
           category: res.data.category_name || '',
           gender: res.data.gender || 'Any',
+          employer_email: res.data.employer_email || '',
+          employer_phone: res.data.employer_phone || '',
         });
       }
     } catch (err) {
@@ -268,6 +272,11 @@ export default function PostJob({ jobId }: { jobId?: number }) {
                       {JOB_TYPES.map(t => <option key={t}>{t}</option>)}
                     </Field>
                   </div>
+ 
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
+                     <Field label="Company Contact Email" name="employer_email" value={formData.employer_email} onChange={handleChange} placeholder="e.g. hr@company.com" type="email" />
+                     <Field label="Direct Contact Number" name="employer_phone" value={formData.employer_phone} onChange={handleChange} placeholder="e.g. +1 234 567 890" />
+                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
                     <Field label="Industry Sector" name="category" value={formData.category} onChange={handleChange} as="select">

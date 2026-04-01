@@ -19,7 +19,7 @@ export default function JobCard({ job }: JobCardProps) {
           <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#1B4696] transition-colors line-clamp-2 flex-1">
             {job.title}
           </h3>
-          <span className="shrink-0 bg-green-50 text-green-600 text-[10px] font-bold px-2.5 py-1.5 rounded uppercase tracking-wider shadow-sm">
+          <span className="shrink-0 bg-green-50 text-green-600 text-[10px] font-bold px-2.5 py-1.5 rounded uppercase tracking-wider">
             {job.type || 'FULL-TIME'}
           </span>
         </div>
