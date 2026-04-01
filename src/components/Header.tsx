@@ -29,7 +29,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center">
             <Image
               src="/logo.png"
               alt="Lurnex Logo"
@@ -131,6 +131,7 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
+                onClick={() => setIsMenuOpen(false)}
                 className="block px-3 py-2 text-slate-600 hover:text-[#1B4696] font-medium transition-colors rounded-md"
               >
                 {link.label}
@@ -139,17 +140,17 @@ export default function Header() {
             <div className="pt-4 border-t border-slate-200 space-y-2">
               {isAuthenticated && user ? (
                 <>
-                  <Link href="/profile" className="block w-full text-center px-4 py-2 bg-[#1B4696]/10 text-[#1B4696] rounded-xl font-semibold">
+                  <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 bg-[#1B4696]/10 text-[#1B4696] rounded-xl font-semibold">
                     My Profile ({user.first_name})
                   </Link>
-                  <button onClick={handleLogout} className="block w-full text-center px-4 py-2 text-red-500 rounded-xl font-semibold border border-red-200">
+                  <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="block w-full text-center px-4 py-2 text-red-500 rounded-xl font-semibold border border-red-200">
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="block w-full text-center px-4 py-2 border-2 border-[#1B4696] text-[#1B4696] rounded-xl font-semibold">Sign In</Link>
-                  <Link href="/register" className="block w-full text-center px-4 py-2 bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] text-white rounded-xl font-semibold">Register</Link>
+                  <Link href="/login" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 border-2 border-[#1B4696] text-[#1B4696] rounded-xl font-semibold">Sign In</Link>
+                  <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] text-white rounded-xl font-semibold">Register</Link>
                 </>
               )}
             </div>

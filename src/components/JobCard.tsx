@@ -14,14 +14,15 @@ export default function JobCard({ job }: JobCardProps) {
 
   return (
     <div className="group relative bg-white rounded-lg border border-slate-200 hover:border-[#1B4696] hover:shadow-lg transition-all duration-300 p-6 flex flex-col h-full">
-      {/* Top Section */}
-      <div className="mb-6 relative">
-            <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#1B4696] transition-colors pr-8 line-clamp-1">
-              {job.title}
-            </h3>
-          <span className="absolute top-6 right-6 bg-green-50 text-green-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+      <div className="mb-6">
+        <div className="flex justify-between items-start gap-4 mb-3">
+          <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#1B4696] transition-colors line-clamp-2 flex-1">
+            {job.title}
+          </h3>
+          <span className="shrink-0 bg-green-50 text-green-600 text-[10px] font-bold px-2.5 py-1.5 rounded uppercase tracking-wider shadow-sm">
             {job.type || 'FULL-TIME'}
           </span>
+        </div>
 
         <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-slate-500">
           <div className="flex items-center gap-1">

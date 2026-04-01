@@ -1054,7 +1054,7 @@ export default function AdminDashboard() {
                      <div>
                        <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Applied Date</h4>
                        <p className="text-sm font-bold text-slate-700">
-                         {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                         {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                        </p>
                      </div>
                    </div>
