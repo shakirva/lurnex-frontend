@@ -27,6 +27,7 @@ export default function EmployerProfile() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -39,6 +40,10 @@ export default function EmployerProfile() {
     website: '',
     phone: user?.phone || '',
   });
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!authLoading) {
@@ -104,15 +109,26 @@ export default function EmployerProfile() {
   const sidebarLinks = [
     { label: "Dashboard", href: "/employer/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
     { label: "Add Job", href: "/employer/post-job", icon: "M12 4v16m8-8H4" },
-    { label: "My Listings", href: "/employer/dashboard", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" },
     { label: "Profile", href: "/employer/profile", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
     { label: "Site", href: "/", icon: "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] flex font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="lg:hidden fixed top-6 right-6 z-[60] w-12 h-12 bg-white border border-slate-200 rounded-2xl shadow-xl flex items-center justify-center text-slate-600 hover:text-indigo-600 transition-all active:scale-90"
+      >
+        {isSidebarOpen ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+        )}
+      </button>
+
       {/* Sidebar - Compact and Modern */}
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50">
+      <aside className={`w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-8">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">L</div>
@@ -164,20 +180,28 @@ export default function EmployerProfile() {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 ml-64 p-8 lg:p-12 overflow-x-hidden">
+      {/* Overlay - Click to close sidebar on mobile */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="lg:hidden fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40"
+        />
+      )}
+
+      {/* Main Content Area */}
+      <main className={`flex-1 ${isSidebarOpen ? 'ml-0' : 'lg:ml-64'} p-6 sm:p-8 lg:p-12 transition-all duration-300 min-h-screen`}>
         <div className="max-w-4xl mx-auto">
           <header className="mb-12">
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Organization Profile</h2>
-            <p className="text-slate-500 mt-1 font-medium italic">Configure your public presence and team identity.</p>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Organization Profile</h2>
+            <p className="text-slate-500 mt-1 font-medium italic text-sm">Configure your public presence and team identity.</p>
           </header>
 
-          <div className="bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-sm relative overflow-hidden">
+          <div className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 border border-slate-200 shadow-sm relative overflow-hidden">
             <form onSubmit={handleSubmit} className="space-y-10">
               {success && (
                 <div className="bg-emerald-50 border-2 border-emerald-100 text-emerald-600 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3 animate-fadeIn">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                  Configurations Updated Synchronously
+                  Configurations Updated Successfully
                 </div>
               )}
               {error && (
@@ -193,7 +217,7 @@ export default function EmployerProfile() {
                     <span className="w-6 h-px bg-indigo-200" />
                     Identity
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                     <Field label="Direct First Name" name="first_name" value={formData.first_name} onChange={handleChange} />
                     <Field label="Direct Last Name" name="last_name" value={formData.last_name} onChange={handleChange} />
                   </div>
@@ -205,13 +229,13 @@ export default function EmployerProfile() {
                     Organizational
                   </h4>
                   <div className="space-y-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                       <Field label="Entity Name" name="company_name" value={formData.company_name} onChange={handleChange} />
                       <Field label="Corporate Hub URL" name="website" value={formData.website} onChange={handleChange} placeholder="https://organization.com" />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                       <Field label="Contact Channel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+971 -- --- ----" />
-                      <div className="flex flex-col justify-end pb-1 opacity-40">
+                      <div className="flex flex-col justify-end pb-1 sm:opacity-40">
                         <p className="text-[10px] font-black uppercase tracking-widest leading-relaxed">Secure verification required for secondary contact channels.</p>
                       </div>
                     </div>
@@ -224,7 +248,7 @@ export default function EmployerProfile() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`px-12 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white shadow-xl transition-all ${loading ? 'bg-slate-300' : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95 shadow-indigo-600/20'}`}
+                  className={`w-full sm:w-auto px-12 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white shadow-xl transition-all ${loading ? 'bg-slate-300' : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95 shadow-indigo-600/20'}`}
                 >
                   {loading ? 'Processing...' : 'Commit Settings'}
                 </button>

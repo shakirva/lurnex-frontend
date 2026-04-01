@@ -118,7 +118,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Company Type *
+                  Company Name *
                 </label>
                 <input
                   type="text"
@@ -127,7 +127,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
-                  placeholder="e.g., IT Company, Educational Institution, Healthcare"
+                  placeholder="e.g., Acme Corp, Google, Lurnex"
                 />
               </div>
             </div>

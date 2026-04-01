@@ -247,8 +247,10 @@ export default function AdminDashboard() {
 
 
   const handleRegisterUser = async (userData: any) => {
+    console.log('🚀 Initiating registration for:', userData);
     try {
       const response = await apiService.createUserAdmin(userData);
+      console.log('✅ Registration response:', response);
       if (response.success) {
         alert('User registered successfully');
         setShowUserModal(false);
@@ -257,8 +259,9 @@ export default function AdminDashboard() {
       } else {
         setError(response.message || 'Failed to register user');
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to register user');
+    } catch (err: any) {
+      console.error('❌ Registration failed:', err);
+      setError(err.message || 'An error occurred during registration');
     }
   };
 
@@ -293,6 +296,21 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-6 py-4 rounded-xl text-sm font-medium flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <FaBan className="w-4 h-4" />
+              {error}
+            </span>
+            <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600 transition-colors">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+
         {/* Stats Card Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center py-6">
@@ -480,6 +498,16 @@ export default function AdminDashboard() {
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium text-slate-500">{employers.length} total</span>
+                <button
+                  onClick={() => {
+                    setUserRoleForModal('employer');
+                    setShowUserModal(true);
+                  }}
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors flex items-center gap-2"
+                >
+                  <FaPlus className="w-3 h-3" />
+                  Register Employer
+                </button>
               </div>
             </div>
 

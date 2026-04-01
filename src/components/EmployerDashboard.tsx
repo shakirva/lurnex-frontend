@@ -20,9 +20,15 @@ export default function EmployerDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [stats, setStats] = useState<DashboardStats>({ totalJobs: 0, totalApplicants: 0, activeJobs: 0, hiredCount: 0 });
   const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    // Close sidebar on mobile when navigating
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!authLoading) {
@@ -50,7 +56,6 @@ export default function EmployerDashboard() {
     try {
       setLoading(true);
 
-      // Parallel fetch for jobs and stats
       const [jobsRes, statsRes] = await Promise.all([
         apiService.getEmployerJobs(),
         apiService.getApplicationStats()
@@ -108,8 +113,20 @@ export default function EmployerDashboard() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex font-sans selection:bg-indigo-100 selection:text-indigo-900">
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="lg:hidden fixed top-6 right-6 z-[60] w-12 h-12 bg-white border border-slate-200 rounded-2xl shadow-xl flex items-center justify-center text-slate-600 hover:text-indigo-600 transition-all active:scale-90"
+      >
+        {isSidebarOpen ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+        )}
+      </button>
+
       {/* Sidebar - Compact and Modern */}
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50">
+      <aside className={`w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-8">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">L</div>
@@ -160,22 +177,30 @@ export default function EmployerDashboard() {
         </div>
       </aside>
 
+      {/* Overlay - Click to close sidebar on mobile */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="lg:hidden fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40"
+        />
+      )}
+
       {/* Main Content Area */}
-      <main className="flex-1 ml-64 p-8 lg:p-12 overflow-x-hidden">
+      <main className={`flex-1 ${isSidebarOpen ? 'ml-0' : 'lg:ml-64'} p-6 sm:p-8 lg:p-12 overflow-x-hidden min-h-screen transition-all duration-300`}>
         {/* Superior Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Employer Dashboard</h1>
-            <p className="text-slate-500 mt-1 font-medium italic">Empower your team with elite talent.</p>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Employer Dashboard</h1>
+            <p className="text-slate-500 mt-1 font-medium italic text-sm">Empower your team with elite talent.</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full border border-indigo-100 text-indigo-700 text-xs font-bold">
               <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
               System Operational
             </div>
             <Link
               href="/employer/post-job"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95 group"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95 group"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
               Post Opportunity
@@ -184,11 +209,11 @@ export default function EmployerDashboard() {
         </header>
 
         {/* Improved Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
           {[
             { label: "Active Postings", value: stats.activeJobs, color: "text-indigo-600", bg: "bg-indigo-50", icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" },
             { label: "Applicants", value: stats.totalApplicants, color: "text-emerald-600", bg: "bg-emerald-50", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" },
-
+            { label: "Hired", value: stats.hiredCount, color: "text-amber-600", bg: "bg-amber-50", icon: "M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" },
           ].map((s, i) => (
             <div key={s.label} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-5 group hover:shadow-md transition-all duration-300">
               <div className={`w-12 h-12 rounded-xl ${s.bg} ${s.color} flex items-center justify-center transition-transform group-hover:scale-110 shrink-0`}>
@@ -234,11 +259,13 @@ export default function EmployerDashboard() {
             ) : (
               <div className="grid grid-cols-1 gap-3">
                 {filteredJobs.map((job) => (
-                  <div key={job.id} className="group p-3 bg-white hover:bg-slate-50 border border-transparent hover:border-slate-200 rounded-xl transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-
+                  <div key={job.id} className="group p-4 bg-white hover:bg-slate-50 border border-transparent hover:border-slate-200 rounded-xl transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 shrink-0 font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors uppercase">
+                         {job.title[0]}
+                      </div>
                       <div className="min-w-0">
-                        <h4 className="text-base font-bold text-slate-900 truncate pr-4">{job.title}</h4>
+                        <h4 className="text-base font-bold text-slate-900 truncate">{job.title}</h4>
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-[11px] font-bold text-slate-400 tracking-wide uppercase">
                           <span className="flex items-center gap-1.5 min-w-0">
                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeWidth={2.5} /></svg>
@@ -252,7 +279,7 @@ export default function EmployerDashboard() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-6 sm:gap-10">
+                    <div className="flex items-center justify-between md:justify-end gap-6 md:gap-10">
                       <div className="text-right">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Candidates</p>
                         <p className="text-xl font-black text-slate-900 leading-none mt-1">{job.applicant_count || 0}</p>
@@ -267,14 +294,14 @@ export default function EmployerDashboard() {
                         </Link>
                         <Link
                           href={`/employer/edit-job/${job.id}`}
-                          className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-slate-900 hover:border-slate-300 transition-all font-bold"
+                          className="hidden sm:flex p-2.5 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-slate-900 hover:border-slate-300 transition-all font-bold"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" strokeWidth={2.5} /></svg>
                         </Link>
 
                         {deleteConfirm === job.id ? (
-                          <div className="flex items-center gap-1.5 scale-95 opacity-0 animate-fadeIn" style={{ animationFillMode: 'forwards' }}>
-                            <button onClick={() => handleDelete(job.id)} className="px-4 py-2.5 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-rose-600/20">Confirm</button>
+                          <div className="flex items-center gap-1.5 animate-fadeIn">
+                            <button onClick={() => handleDelete(job.id)} className="px-4 py-2.5 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest">Confirm</button>
                             <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2.5 bg-slate-100 text-slate-500 rounded-xl text-[10px] font-black uppercase tracking-widest">Cancel</button>
                           </div>
                         ) : (

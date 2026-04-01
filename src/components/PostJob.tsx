@@ -32,6 +32,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -44,6 +45,10 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     category: '',
     gender: 'Any',
   });
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!authLoading) {
@@ -145,9 +150,21 @@ export default function PostJob({ jobId }: { jobId?: number }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] flex font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="lg:hidden fixed top-6 right-6 z-[60] w-12 h-12 bg-white border border-slate-200 rounded-2xl shadow-xl flex items-center justify-center text-slate-600 hover:text-indigo-600 transition-all active:scale-90"
+      >
+        {isSidebarOpen ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+        )}
+      </button>
+
       {/* Sidebar - Compact and Modern */}
-      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50">
+      <aside className={`w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-8">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">L</div>
@@ -199,56 +216,60 @@ export default function PostJob({ jobId }: { jobId?: number }) {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 ml-64 p-8 lg:p-12 overflow-x-hidden">
+      {/* Overlay */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="lg:hidden fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40"
+        />
+      )}
+
+      {/* Main Content Area */}
+      <main className={`flex-1 ${isSidebarOpen ? 'ml-0' : 'lg:ml-64'} p-6 sm:p-8 lg:p-12 transition-all duration-300 min-h-screen`}>
         <div className="max-w-4xl mx-auto">
-          <header className="flex items-center justify-between mb-12">
+          <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-12">
             <div>
-              <h2 className="text-3xl font-black text-slate-900 tracking-tight">{jobId ? 'Refine Listing' : 'Publish Opportunity'}</h2>
-              <p className="text-slate-500 mt-1 font-medium italic">Attract top-tier candidates to your organization.</p>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{jobId ? 'Refine Listing' : 'Publish Opportunity'}</h2>
+              <p className="text-slate-500 mt-1 font-medium italic text-sm">Attract top-tier candidates to your organization.</p>
             </div>
-            <Link href="/employer/dashboard" className="px-6 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all shadow-sm flex items-center gap-2">
+            <Link href="/employer/dashboard" className="w-fit px-6 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-50 transition-all shadow-sm flex items-center gap-2">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" strokeWidth={2}/></svg>
               Discard
             </Link>
           </header>
 
           {success ? (
-            <div className="bg-white rounded-[2.5rem] p-16 border border-slate-200 shadow-sm text-center animate-scaleIn">
+            <div className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-10 sm:p-16 border border-slate-200 shadow-sm text-center animate-scaleIn">
               <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-sm">
                 <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg>
               </div>
-              <h3 className="text-2xl font-black text-slate-900">Successfully Processed</h3>
-              <p className="text-slate-500 mt-2 font-medium">Your opportunity is now live on the Lurnex platform.</p>
-              <div className="mt-10 flex items-center justify-center gap-3 text-slate-400">
-                <div className="w-4 h-4 rounded-full border-2 border-slate-200 border-t-indigo-600 animate-spin" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Routing to Dashboard</span>
-              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900">Successfully Processed</h3>
+              <p className="text-slate-500 mt-2 font-medium text-sm">Your opportunity is now live on the Lurnex platform.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-sm">
+            <div className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 border border-slate-200 shadow-sm">
               <form onSubmit={handleSubmit} className="space-y-10">
                 {error && (
-                  <div className="bg-rose-50 border-2 border-rose-100 text-rose-600 px-6 py-4 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center gap-3">
+                  <div className="bg-rose-50 border-2 border-rose-100 text-rose-600 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
                     <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
                     {error}
                   </div>
                 )}
 
                 <div className="space-y-10">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                     <Field label="Job Position Title *" name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Senior Product Architect" required />
-                    <Field label="Hiring Entity *" name="company" value={formData.company} onChange={handleChange} placeholder="e.g. Acme Innovations" required />
+                    <Field label="Company Name *" name="company" value={formData.company} onChange={handleChange} placeholder="e.g. Acme Innovations" required />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                     <Field label="Primary Location *" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Dubai, UAE" required />
                     <Field label="Contract Modality *" name="type" value={formData.type} onChange={handleChange} as="select" required>
                       {JOB_TYPES.map(t => <option key={t}>{t}</option>)}
                     </Field>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
                     <Field label="Industry Sector" name="category" value={formData.category} onChange={handleChange} as="select">
                       <option value="">Selection required...</option>
                       {CATEGORIES.map(c => <option key={c}>{c}</option>)}
@@ -268,7 +289,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`px-12 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white shadow-xl transition-all ${loading ? 'bg-slate-300' : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95 shadow-indigo-600/20'}`}
+                    className={`w-full sm:w-auto px-12 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white shadow-xl transition-all ${loading ? 'bg-slate-300' : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95 shadow-indigo-600/20'}`}
                   >
                     {loading ? 'Validating...' : jobId ? 'Commit Refinement' : 'Deploy Opportunity'}
                   </button>
