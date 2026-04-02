@@ -32,7 +32,7 @@ export default function Header() {
           <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center">
             <Image
               src="/logo.png"
-              alt="Lurnex Logo"
+              alt="TriaGull Logo"
               width={180}
               height={55}
               priority
@@ -160,3 +160,4 @@ export default function Header() {
     </header>
   );
 }
+

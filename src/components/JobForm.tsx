@@ -131,7 +131,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
-                  placeholder="e.g., Acme Corp, Google, Lurnex"
+                  placeholder="e.g., Acme Corp, Google, TriaGull"
                 />
               </div>
             </div>
@@ -300,3 +300,4 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
     </div>
   );
 }
+

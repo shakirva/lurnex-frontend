@@ -9,9 +9,9 @@ export default function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <Image src="/logo.png" alt="Lurnex Logo" width={48} height={48} className="rounded-xl" />
+              <Image src="/logo.png" alt="TriaGull Logo" width={48} height={48} className="rounded-xl" />
               {/* <div>
-                <h3 className="text-xl font-bold bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] bg-clip-text text-transparent">Lurnex</h3>
+                <h3 className="text-xl font-bold bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] bg-clip-text text-transparent">TriaGull</h3>
                 <p className="text-xs text-slate-500">Find your dream job</p>
               </div> */}
             </div>
@@ -42,7 +42,7 @@ export default function Footer() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <span className="text-white text-sm font-medium">support@lurnex.com</span>
+                <span className="text-white text-sm font-medium">support@triagull.com</span>
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="border-t border-white/20 pt-6 flex flex-col md:flex-row justify-between items-center">
           <div className="text-white/80 text-sm mb-4 md:mb-0 flex items-center">
-            <span>© 2025 Lurnex. All Right Reserved.</span>
+            <span>© 2025 TriaGull. All Right Reserved.</span>
             <div className="hidden md:block w-1 h-1 bg-white/40 rounded-full mx-3"></div>
             <span className="hidden md:block">Made with ❤️ for job seekers</span>
           </div>

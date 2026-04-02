@@ -73,7 +73,7 @@ export default function Register() {
             <Link href="/">
               <Image
                 src="/logo.png"
-                alt="Lurnex Logo"
+                alt="TriaGull Logo"
                 width={180}
                 height={55}
                 className="h-16 w-auto"
@@ -82,7 +82,7 @@ export default function Register() {
           </div>
           <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Create Account</h2>
           <p className="mt-2 text-sm text-slate-600">
-            Join Lurnex to find your dream job or hire top talent
+            Join TriaGull to find your dream job or hire top talent
           </p>
         </div>
 
@@ -265,3 +265,4 @@ export default function Register() {
     </div>
   );
 }
+

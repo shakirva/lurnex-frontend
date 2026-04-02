@@ -172,7 +172,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
         <div className="p-8">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">L</div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">Lurnex Hub</span>
+            <span className="text-lg font-bold text-slate-900 tracking-tight">TriaGull Jobs</span>
           </Link>
         </div>
 
@@ -248,7 +248,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
                 <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900">Successfully Processed</h3>
-              <p className="text-slate-500 mt-2 font-medium text-sm">Your opportunity is now live on the Lurnex platform.</p>
+              <p className="text-slate-500 mt-2 font-medium text-sm">Your opportunity is now live on the TriaGull platform.</p>
             </div>
           ) : (
             <div className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 border border-slate-200 shadow-sm">
@@ -311,3 +311,4 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     </div>
   );
 }
+

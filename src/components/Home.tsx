@@ -391,7 +391,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
               Latest Job Openings
             </h2>
-            <p className="text-slate-600">Explore the newest opportunities available on Lurnex Hub</p>
+            <p className="text-slate-600">Explore the newest opportunities available on TriaGull Jobs</p>
           </div>
 
           {/* Job Cards Grid */}
@@ -414,3 +414,4 @@ export default function Home() {
     </>
   );
 }
+

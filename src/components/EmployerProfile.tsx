@@ -132,7 +132,7 @@ export default function EmployerProfile() {
         <div className="p-8">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">L</div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">Lurnex Hub</span>
+            <span className="text-lg font-bold text-slate-900 tracking-tight">TriaGull Jobs</span>
           </Link>
         </div>
 
@@ -260,3 +260,4 @@ export default function EmployerProfile() {
     </div>
   );
 }
+

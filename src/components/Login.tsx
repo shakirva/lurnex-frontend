@@ -68,7 +68,7 @@ export default function Login() {
             <Link href="/">
               <Image
                 src="/logo.png"
-                alt="Lurnex Logo"
+                alt="TriaGull Logo"
                 width={180}
                 height={55}
                 className="h-16 w-auto"
@@ -173,3 +173,4 @@ export default function Login() {
     </div>
   );
 }
+

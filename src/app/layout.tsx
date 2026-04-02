@@ -8,7 +8,7 @@ const jost = Jost({
 });
 
 export const metadata = {
-  title: "Lurnex - Global Recruitment Platform",
+  title: "TriaGull - Global Recruitment Platform",
   description: "Your gateway to international job opportunities. Connect with recruiters and find your dream job overseas.",
   icons: {
     icon: "/icon.png",
@@ -30,3 +30,4 @@ export default function RootLayout({
     </html>
   );
 }
+

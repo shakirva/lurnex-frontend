@@ -82,7 +82,7 @@ export default function SubscriptionPlans() {
       return;
     }
 
-    alert(`Coming Soon: The payment gateway is currently under integration. Please contact Lurnex admin to manually enable the ${PLANS.find(p => p.id === planId)?.name} for your account.`);
+    alert(`Coming Soon: The payment gateway is currently under integration. Please contact TriaGull admin to manually enable the ${PLANS.find(p => p.id === planId)?.name} for your account.`);
   };
 
   return (
@@ -176,3 +176,4 @@ export default function SubscriptionPlans() {
     </div>
   );
 }
+
