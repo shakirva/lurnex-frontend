@@ -23,6 +23,7 @@ export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobSearchQuery, setJobSearchQuery] = useState("");
 
   const [showJobForm, setShowJobForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
@@ -456,15 +457,31 @@ export default function AdminDashboard() {
         {/* Jobs Table */}
         {activeTab === 'jobs' && (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-            <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+            <div className="px-6 py-4 border-b border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
               <h2 className="text-lg font-semibold text-slate-900">Job Vacancies</h2>
-              <button
-                onClick={() => setShowJobForm(true)}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2"
-              >
-                <FaPlus className="w-4 h-4" />
-                Add Job
-              </button>
+              <div className="flex items-center gap-4 w-full md:w-auto">
+                <div className="relative flex-1 md:w-64">
+                  <input
+                    type="text"
+                    placeholder="Search jobs..."
+                    value={jobSearchQuery}
+                    onChange={(e) => setJobSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  />
+                  <div className="absolute left-3 top-2.5 text-slate-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowJobForm(true)}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <FaPlus className="w-4 h-4" />
+                  Add Job
+                </button>
+              </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -479,7 +496,12 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-200">
-                  {jobs.map((job) => (
+                  {jobs.filter(job => 
+                    job.title.toLowerCase().includes(jobSearchQuery.toLowerCase()) ||
+                    job.company.toLowerCase().includes(jobSearchQuery.toLowerCase()) ||
+                    job.location.toLowerCase().includes(jobSearchQuery.toLowerCase()) ||
+                    (job.category && job.category.toLowerCase().includes(jobSearchQuery.toLowerCase()))
+                  ).map((job) => (
                     <tr key={job.id} className="hover:bg-slate-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-slate-900">{job.title}</div>
