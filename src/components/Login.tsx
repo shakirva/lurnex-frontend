@@ -91,7 +91,7 @@ export default function Login() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
-                Username or Email
+                Username
               </label>
               <input
                 id="username"
@@ -144,8 +144,8 @@ export default function Login() {
               type="submit"
               disabled={loading}
               className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${loading
-                  ? 'bg-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] hover:opacity-95 hover:shadow-xl'
+                ? 'bg-slate-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] hover:opacity-95 hover:shadow-xl'
                 }`}
             >
               {loading ? 'Signing In...' : 'Sign In'}
