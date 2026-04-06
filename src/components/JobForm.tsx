@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { type Job } from "@/lib/api";
+import { type Job, apiService } from "@/lib/api";
 
 interface JobFormProps {
   job?: Job | null;
@@ -20,14 +20,30 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
     description: '',
     requirements: [] as string[],
     logo: '',
-    category: 'General',
+    category_id: 1,
     foodAccommodation: '',
     gender: '',
     employer_email: '',
     employer_phone: ''
   });
 
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
   const [requirementInput, setRequirementInput] = useState('');
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await apiService.getJobCategories();
+      if (response.success && response.data) {
+        setCategories(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   useEffect(() => {
     if (job) {
@@ -41,7 +57,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
         description: job.description ?? '',
         requirements: job.requirements ?? [],
         logo: job.logo ?? '',
-        category: job.category ?? 'General',
+        category_id: job.category_id ?? 1,
         foodAccommodation: job.foodAccommodation ?? '',
         gender: job.gender ?? '',
         employer_email: job.employer_email ?? '',
@@ -62,7 +78,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'category_id' ? parseInt(value) : value
     }));
   };
 
@@ -82,7 +98,6 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
   };
 
   const jobTypes = ['Full-time', 'Part-time', 'Remote', 'Hybrid', 'Contract'];
-  const categories = ['Development', 'Design', 'Marketing', 'Management', 'Sales', 'Support', 'Other'];
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -177,9 +192,28 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
-                  placeholder="e.g., New York, NY"
+                  placeholder="e.g., Dubai, UAE"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Category *
+                </label>
+                <select
+                  name="category_id"
+                  value={formData.category_id}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                >
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
                   Job Type *
@@ -196,22 +230,22 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Salary Range *
+                </label>
+                <input
+                  type="text"
+                  name="salary"
+                  value={formData.salary}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  placeholder="e.g., $80,000 - $120,000"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Salary Range *
-              </label>
-              <input
-                type="text"
-                name="salary"
-                value={formData.salary}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
-                placeholder="e.g., $80,000 - $120,000"
-              />
-            </div>
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">

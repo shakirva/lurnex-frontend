@@ -8,8 +8,7 @@ import JobCard from "./JobCard";
 import { useSearchParams } from "next/navigation";
 
 const jobTypes = ['All', 'Full-time', 'Part-time', 'Contract', 'Internship', 'Remote'];
-const locations = ['All', 'Dubai, UAE', 'Abu Dhabi, UAE', 'Sharjah, UAE', 'Riyadh, Saudi Arabia', 'Jeddah, Saudi Arabia', 'Doha, Qatar', 'Kuwait City, Kuwait', 'Manama, Bahrain', 'Muscat, Oman', 'Other'];
-const categories = ['All', "Accounting", "Engineering", "IT & Technology", "Healthcare", "Hospitality", "Construction", "Sales", "Marketing", "Education", "Other"];
+const categories = ['All', "Development", "Design", "Marketing", "Sales", "Management", "Finance", "Customer Service", "Healthcare", "Education", "Engineering"];
 
 export default function FindJobs() {
   const searchParams = useSearchParams();
@@ -17,7 +16,7 @@ export default function FindJobs() {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
-  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(categoryParam || "All");
   const [sortBy, setSortBy] = useState("newest");
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -105,7 +104,8 @@ export default function FindJobs() {
     // Type filter
     const matchesType = selectedType === "All" || job.type === selectedType;
     // Location filter
-    const matchesLocation = selectedLocation === "All" || job.location === selectedLocation;
+    const matchesLocation = selectedLocation === "" || selectedLocation === "All" || 
+      (job.location && job.location.toLowerCase().includes(selectedLocation.toLowerCase()));
     // Category filter
     const matchesCategory = selectedCategory === "All" || job.category === selectedCategory || job.category_name === selectedCategory;
     
@@ -202,18 +202,17 @@ export default function FindJobs() {
                 <div className="space-y-3">
                   <label className="block text-sm font-semibold text-slate-700">Location</label>
                   <div className="relative">
-                    <select
+                    <input
+                      type="text"
+                      placeholder="e.g., Dubai, Sharjah..."
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
-                    >
-                      {locations.map(location => (
-                        <option key={location} value={location}>{location}</option>
-                      ))}
-                    </select>
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 placeholder-slate-400 font-medium"
+                    />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                       <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </div>
                   </div>
@@ -246,7 +245,7 @@ export default function FindJobs() {
                     onClick={() => {
                       setSearchTerm("");
                       setSelectedType("All");
-                      setSelectedLocation("All");
+                      setSelectedLocation("");
                       setSelectedCategory("All");
                     }}
                     className="w-full px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors"

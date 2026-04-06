@@ -35,7 +35,7 @@ export default function Login() {
 
     try {
       const success = await login(credentials.username, credentials.password);
-      
+
       if (success) {
         // The AuthContext doesn't expose the user directly in the return of login, 
         // but it updates the state. We can use a short delay or check the stored user.
@@ -143,11 +143,10 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${
-                loading
+              className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${loading
                   ? 'bg-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] hover:opacity-95 hover:shadow-xl'
-              }`}
+                }`}
             >
               {loading ? 'Signing In...' : 'Sign In'}
             </button>
@@ -164,11 +163,11 @@ export default function Login() {
         </div>
 
         {/* Demo Credentials Hint */}
-        <div className="mt-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
+        {/* <div className="mt-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
           <p className="text-xs text-blue-800 text-center">
             <span className="font-bold">Admin Demo:</span> admin / admin123
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ const PLANS = [
     id: "basic",
     name: "Basic Plan",
     duration: "3 Months",
-    price: "₹399",
+    price: "₹599",
     highlight: false,
     badge: null,
     features: [
@@ -27,7 +27,7 @@ const PLANS = [
     id: "standard",
     name: "Standard Plan",
     duration: "6 Months",
-    price: "₹599",
+    price: "₹899",
     highlight: true,
     badge: null,
     features: [
@@ -42,7 +42,7 @@ const PLANS = [
     id: "premium",
     name: "Premium Plan",
     duration: "1 Year",
-    price: "₹999",
+    price: "₹1299",
     highlight: false,
     badge: null,
     features: [
