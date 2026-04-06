@@ -21,7 +21,6 @@ export default function Header() {
     { label: "Find Jobs", href: "/jobs" },
     { label: "Pricing", href: "/subscription" },
     { label: "Services", href: "/services" },
-    { label: "Employer Panel", href: "/employer/dashboard" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -47,7 +46,7 @@ export default function Header() {
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className={link.label === "Employer Panel" 
+                  className={link.label === "Employer Panel"
                     ? "px-4 py-2 text-sm font-semibold text-[#1B4696] bg-[#1B4696]/5 border border-[#1B4696]/20 rounded-xl hover:bg-[#1B4696] hover:text-white transition-all shadow-sm"
                     : "text-slate-600 hover:text-[#1B4696] font-medium transition-colors text-sm"
                   }
