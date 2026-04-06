@@ -21,6 +21,7 @@ export default function Header() {
     { label: "Find Jobs", href: "/jobs" },
     { label: "Pricing", href: "/subscription" },
     { label: "Services", href: "/services" },
+    { label: "Employer Panel", href: "/employer/dashboard" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -46,7 +47,10 @@ export default function Header() {
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className="text-slate-600 hover:text-[#1B4696] font-medium transition-colors text-sm"
+                  className={link.label === "Employer Panel" 
+                    ? "px-4 py-2 text-sm font-semibold text-[#1B4696] bg-[#1B4696]/5 border border-[#1B4696]/20 rounded-xl hover:bg-[#1B4696] hover:text-white transition-all shadow-sm"
+                    : "text-slate-600 hover:text-[#1B4696] font-medium transition-colors text-sm"
+                  }
                 >
                   {link.label}
                 </Link>
@@ -140,6 +144,16 @@ export default function Header() {
             <div className="pt-4 border-t border-slate-200 space-y-2">
               {isAuthenticated && user ? (
                 <>
+                  {user.role === 'employer' && (
+                    <Link href="/employer/dashboard" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 border-2 border-[#1B4696] text-[#1B4696] rounded-xl font-semibold mb-2">
+                      Employer Dashboard
+                    </Link>
+                  )}
+                  {user.role === 'admin' && (
+                    <Link href="/admin" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 border-2 border-[#1B4696] text-[#1B4696] rounded-xl font-semibold mb-2">
+                      Admin Panel
+                    </Link>
+                  )}
                   <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 bg-[#1B4696]/10 text-[#1B4696] rounded-xl font-semibold">
                     My Profile ({user.first_name})
                   </Link>
