@@ -13,7 +13,17 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useState("");
   const router = useRouter();
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery) params.append('search', searchQuery);
+    if (location) params.append('location', location);
+    router.push(`/jobs?${params.toString()}`);
+  };
 
   useEffect(() => {
     fetchJobs();
@@ -52,7 +62,7 @@ export default function Home() {
               </p>
 
               {/* Search Form */}
-              <div className="bg-white rounded-md p-4 border border-slate-200 mb-8">
+              <form onSubmit={handleSearch} className="bg-white rounded-md p-4 border border-slate-200 mb-8">
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Job Title Input */}
                   <div className="flex-1 relative">
@@ -64,6 +74,8 @@ export default function Home() {
                     <input
                       type="text"
                       placeholder="Job title, keyword..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B4696] focus:border-transparent text-slate-700 placeholder-slate-400"
                     />
                   </div>
@@ -79,16 +91,18 @@ export default function Home() {
                     <input
                       type="text"
                       placeholder="Your Location"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
                       className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B4696] focus:border-transparent text-slate-700 placeholder-slate-400"
                     />
                   </div>
 
                   {/* Find Job Button */}
-                  <button className="px-8 py-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-md font-semibold hover:opacity-90 transition-all whitespace-nowrap shadow-lg hover:shadow-xl">
+                  <button type="submit" className="px-8 py-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-md font-semibold hover:opacity-90 transition-all whitespace-nowrap shadow-lg hover:shadow-xl">
                     Find Job
                   </button>
                 </div>
-              </div>
+              </form>
 
               {/* Suggestions */}
               {/* <div className="text-left">

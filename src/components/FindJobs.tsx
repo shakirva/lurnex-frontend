@@ -13,10 +13,12 @@ const categories = ['All', "Development", "Design", "Marketing", "Sales", "Manag
 export default function FindJobs() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
+  const searchQueryParam = searchParams.get('search');
+  const locationParam = searchParams.get('location');
   
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(searchQueryParam || "");
   const [selectedType, setSelectedType] = useState("All");
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState(locationParam || "");
   const [selectedCategory, setSelectedCategory] = useState(categoryParam || "All");
   const [sortBy, setSortBy] = useState("newest");
   const [jobs, setJobs] = useState<Job[]>([]);

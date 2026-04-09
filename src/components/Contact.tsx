@@ -85,8 +85,13 @@ export default function Contact() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-100 text-red-700 px-4 py-3 rounded-xl mb-4 border border-red-300">
+              <div className="bg-red-100 text-red-700 px-4 py-3 rounded-xl mb-4 border border-red-300 animate-in fade-in duration-300">
                 {error}
+              </div>
+            )}
+            {success && (
+              <div className="bg-emerald-100 text-emerald-700 px-4 py-3 rounded-xl mb-4 border border-emerald-300 animate-in fade-in duration-300">
+                Message sent successfully! We'll get back to you soon.
               </div>
             )}
               {/* Name and Email Row */}
@@ -101,6 +106,7 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200"
                     placeholder="Your full name"
                   />
@@ -115,6 +121,7 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200"
                     placeholder="your.email@example.com"
                   />
@@ -146,6 +153,7 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 appearance-none cursor-pointer"
                   >
                     <option value="">Select a subject</option>
@@ -171,6 +179,7 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={6}
+                  required
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200 resize-none"
                   placeholder="Tell us how we can help you..."
                 />
@@ -179,9 +188,17 @@ export default function Contact() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
+                disabled={loading}
+                className="w-full px-8 py-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Send Message
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Sending...
+                  </>
+                ) : (
+                  'Send Message'
+                )}
               </button>
             </form>
           </div>
