@@ -14,8 +14,8 @@ export default function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    first_name: '',
-    last_name: '',
+    full_name: '',
+    phone: '',
     role: 'user' as 'user' | 'employer',
     company_name: ''
   });
@@ -47,7 +47,19 @@ export default function Register() {
     }
 
     try {
-      const { confirmPassword, ...registerData } = formData;
+      const { confirmPassword, full_name, ...rest } = formData;
+      
+      // Split full name into first and last name for backend compatibility
+      const nameParts = full_name.trim().split(' ');
+      const first_name = nameParts[0];
+      const last_name = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+      const registerData = {
+        ...rest,
+        first_name,
+        last_name
+      };
+
       const response = await register(registerData);
       
       if (response.success) {
@@ -94,25 +106,28 @@ export default function Register() {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">First Name</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Full Name</label>
                 <input
-                  name="first_name"
+                  name="full_name"
                   type="text"
                   required
-                  value={formData.first_name}
+                  placeholder="John Doe"
+                  value={formData.full_name}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
                 />
               </div>
+
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Last Name</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Phone Number</label>
                 <input
-                  name="last_name"
-                  type="text"
+                  name="phone"
+                  type="tel"
                   required
-                  value={formData.last_name}
+                  placeholder="+91 1234567890"
+                  value={formData.phone}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
                 />

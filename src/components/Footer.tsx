@@ -42,7 +42,7 @@ export default function Footer() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <span className="text-white text-sm font-medium">support@triagull.com</span>
+                <span className="text-white text-sm font-medium">info@triagulljobs.in</span>
               </div>
             </div>
           </div>
@@ -69,6 +69,15 @@ export default function Footer() {
 
                 <span>Contact</span>
               </a></li>
+              <li><a href="/privacy-policy" className="flex items-center space-x-2 hover:text-white transition-all duration-300 text-sm font-medium py-1">
+                <span>Privacy Policy</span>
+              </a></li>
+              <li><a href="/refund-policy" className="flex items-center space-x-2 hover:text-white transition-all duration-300 text-sm font-medium py-1">
+                <span>Refund Policy</span>
+              </a></li>
+              <li><a href="/terms-and-conditions" className="flex items-center space-x-2 hover:text-white transition-all duration-300 text-sm font-medium py-1">
+                <span>Terms & Conditions</span>
+              </a></li>
             </ul>
           </div>
         </div>
@@ -76,7 +85,7 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="border-t border-white/20 pt-6 flex flex-col md:flex-row justify-between items-center">
           <div className="text-white/80 text-sm mb-4 md:mb-0 flex items-center">
-            <span>© 2025 TriaGull. All Right Reserved.</span>
+            <span>© 2025 Triagull Jobs. All Right Reserved.</span>
             <div className="hidden md:block w-1 h-1 bg-white/40 rounded-full mx-3"></div>
             <span className="hidden md:block">Made with ❤️ for job seekers</span>
           </div>
