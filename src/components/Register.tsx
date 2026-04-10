@@ -48,7 +48,7 @@ export default function Register() {
 
     try {
       const { confirmPassword, full_name, ...rest } = formData;
-      
+
       // Split full name into first and last name for backend compatibility
       const nameParts = full_name.trim().split(' ');
       const first_name = nameParts[0];
@@ -61,7 +61,7 @@ export default function Register() {
       };
 
       const response = await register(registerData);
-      
+
       if (response.success) {
         router.push(formData.role === 'employer' ? '/employer/dashboard' : '/jobs');
       } else {
@@ -79,7 +79,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 font-outfit">
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-lg w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <Link href="/">
@@ -120,30 +120,32 @@ export default function Register() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Phone Number</label>
-                <input
-                  name="phone"
-                  type="tel"
-                  required
-                  placeholder="+91 1234567890"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Phone Number</label>
+                  <input
+                    name="phone"
+                    type="tel"
+                    required
+                    placeholder="+91..."
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Username</label>
+                  <input
+                    name="username"
+                    type="text"
+                    required
+                    placeholder="johndoe"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
+                  />
+                </div>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">Username</label>
-              <input
-                name="username"
-                type="text"
-                required
-                value={formData.username}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
-              />
             </div>
 
             <div>
@@ -164,22 +166,20 @@ export default function Register() {
                 <button
                   type="button"
                   onClick={() => setFormData(p => ({ ...p, role: 'user' }))}
-                  className={`py-3 rounded-xl border-2 transition-all font-medium ${
-                    formData.role === 'user' 
-                      ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]' 
+                  className={`py-3 rounded-xl border-2 transition-all font-medium ${formData.role === 'user'
+                      ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]'
                       : 'border-slate-100 bg-slate-50 text-slate-500 hover:bg-slate-100'
-                  }`}
+                    }`}
                 >
                   Job Seeker
                 </button>
                 <button
                   type="button"
                   onClick={() => setFormData(p => ({ ...p, role: 'employer' }))}
-                  className={`py-3 rounded-xl border-2 transition-all font-medium ${
-                    formData.role === 'employer' 
-                      ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]' 
+                  className={`py-3 rounded-xl border-2 transition-all font-medium ${formData.role === 'employer'
+                      ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]'
                       : 'border-slate-100 bg-slate-50 text-slate-500 hover:bg-slate-100'
-                  }`}
+                    }`}
                 >
                   Employer
                 </button>
@@ -257,11 +257,10 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${
-                loading
+              className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${loading
                   ? 'bg-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] hover:opacity-95 hover:shadow-xl'
-              }`}
+                }`}
             >
               {loading ? 'Creating Account...' : 'Get Started'}
             </button>

@@ -195,7 +195,7 @@ export default function EmployerApplicants({ jobId }: { jobId: number }) {
                       <div className="flex-1 overflow-hidden">
                         <p className={`font-bold truncate ${selected?.id === app.id ? 'text-white' : 'text-slate-900'}`}>{app.applicant_name}</p>
                         <p className={`text-[10px] uppercase font-black tracking-widest mt-1 ${selected?.id === app.id ? 'text-white/60' : 'text-slate-400'}`}>
-                          {app.status || 'Pending'}
+                          {app.status || 'Pending'} {app.applicant_phone && `• ${app.applicant_phone}`}
                         </p>
                       </div>
                     </div>

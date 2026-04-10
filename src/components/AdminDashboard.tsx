@@ -793,6 +793,7 @@ export default function AdminDashboard() {
                           <div className="flex flex-col">
                             <span className="font-bold text-slate-900">{app.applicant_name}</span>
                             <span className="text-xs text-slate-500">{app.applicant_email}</span>
+                            {app.applicant_phone && <span className="text-[10px] text-slate-400 mt-0.5">{app.applicant_phone}</span>}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-700">
