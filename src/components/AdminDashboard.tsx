@@ -865,9 +865,9 @@ export default function AdminDashboard() {
                 <label className="block text-sm font-medium text-slate-700">Select Subscription Plan</label>
                 <div className="grid grid-cols-1 gap-3">
                   {[
-                    { id: 'basic', name: 'Basic (3 Months)', price: '₹399' },
-                    { id: 'standard', name: 'Standard (6 Months)', price: '₹599' },
-                    { id: 'premium', name: 'Premium (1 Year)', price: '₹999' },
+                    { id: 'basic', name: 'Basic (3 Months)', price: '₹599' },
+                    { id: 'standard', name: 'Standard (6 Months)', price: '₹899' },
+                    { id: 'premium', name: 'Premium (1 Year)', price: '₹1299' },
                     { id: 'accountant', name: 'Accountant (1 Year)', price: '₹3,999' },
                   ].map((plan) => (
                     <label
