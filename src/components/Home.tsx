@@ -11,7 +11,14 @@ export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([
+    {id: 1, name: "Accounting"},
+    {id: 2, name: "Engineering"},
+    {id: 3, name: "IT & Technology"},
+    {id: 4, name: "Healthcare"},
+    {id: 5, name: "Design"},
+    {id: 6, name: "Marketing"}
+  ]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,7 +42,14 @@ export default function Home() {
     try {
       const response = await apiService.getJobCategories();
       if (response.success && response.data) {
-        setCategories(response.data);
+        const fetchedCategories = response.data;
+        const hasAccounting = fetchedCategories.some((cat: any) => cat.name === "Accounting");
+        
+        if (!hasAccounting) {
+          setCategories([{ id: 0, name: "Accounting" }, ...fetchedCategories]);
+        } else {
+          setCategories(fetchedCategories);
+        }
       }
     } catch (error) {
       console.error('Error fetching categories:', error);

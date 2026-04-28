@@ -20,7 +20,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
     description: '',
     requirements: [] as string[],
     logo: '',
-    category_id: 1,
+    category_id: 0,
     foodAccommodation: '',
     gender: '',
     employer_email: '',
@@ -28,8 +28,8 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
   });
 
   const [categories, setCategories] = useState<{id: number, name: string}[]>([
-    {id: 1, name: "Accounting"},
-    {id: 2, name: "Development"},
+    {id: 0, name: "Accounting"},
+    {id: 1, name: "Development"},
     {id: 3, name: "Design"},
     {id: 4, name: "Marketing"},
     {id: 5, name: "Sales"},
@@ -109,8 +109,11 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
       .map(req => req.trim())
       .filter(req => req.length > 0);
     
+    const selectedCat = categories.find(c => c.id === formData.category_id);
+    
     onSubmit({
       ...formData,
+      category_name: selectedCat?.name,
       requirements: requirementsArray.length > 0 ? requirementsArray : ['No specific requirements'],
       logo: 'https://via.placeholder.com/60' // Default placeholder logo
     });

@@ -42,15 +42,15 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     salary: '',
     description: '',
     requirements: '',
-    category_id: 1,
+    category_id: 0,
     gender: 'Any',
     employer_email: '',
     employer_phone: '',
   });
 
   const [categories, setCategories] = useState<{id: number, name: string}[]>([
-    {id: 1, name: "Accounting"},
-    {id: 2, name: "Engineering"},
+    {id: 0, name: "Accounting"},
+    {id: 1, name: "Engineering"},
     {id: 3, name: "IT & Technology"},
     {id: 4, name: "Healthcare"},
     {id: 5, name: "Hospitality"},
@@ -152,8 +152,10 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     setError('');
 
     try {
+      const selectedCat = categories.find(c => c.id === formData.category_id);
       const payload = {
         ...formData,
+        category_name: selectedCat?.name,
         requirements: formData.requirements.split('\n').filter(r => r.trim()),
         is_active: true,
         status: 'active'
