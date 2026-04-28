@@ -8,7 +8,6 @@ import JobCard from "./JobCard";
 import { useSearchParams } from "next/navigation";
 
 const jobTypes = ['All', 'Full-time', 'Part-time', 'Contract', 'Internship', 'Remote'];
-const categories = ['All', "Development", "Design", "Marketing", "Sales", "Management", "Finance", "Customer Service", "Healthcare", "Education", "Engineering"];
 
 export default function FindJobs() {
   const searchParams = useSearchParams();
@@ -27,6 +26,22 @@ export default function FindJobs() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await apiService.getJobCategories();
+      if (response.success && response.data) {
+        setCategories(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   useEffect(() => {
     setPage(1);
@@ -188,8 +203,9 @@ export default function FindJobs() {
                       onChange={(e) => setSelectedCategory(e.target.value)}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
                     >
+                      <option value="All">All Categories</option>
                       {categories.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
+                        <option key={cat.id} value={cat.name}>{cat.name}</option>
                       ))}
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">

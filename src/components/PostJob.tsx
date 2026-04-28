@@ -6,7 +6,7 @@ import { apiService } from "@/lib/api";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 
-const CATEGORIES = ["Accounting", "Engineering", "IT & Technology", "Healthcare", "Hospitality", "Construction", "Sales", "Marketing", "Education", "Other"];
+// CATEGORIES will be fetched from API
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship", "Remote"];
 
 const Field = ({ label, name, value, onChange, type = "text", as, children, ...rest }: any) => {
@@ -42,11 +42,28 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     salary: '',
     description: '',
     requirements: '',
-    category: '',
+    category_id: 1,
     gender: 'Any',
     employer_email: '',
     employer_phone: '',
   });
+
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await apiService.getJobCategories();
+      if (response.success && response.data) {
+        setCategories(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   useEffect(() => {
     setIsSidebarOpen(false);
@@ -86,7 +103,7 @@ export default function PostJob({ jobId }: { jobId?: number }) {
           salary: res.data.salary || '',
           description: res.data.description || '',
           requirements: res.data.requirements?.join('\n') || '',
-          category: res.data.category_name || '',
+          category_id: res.data.category_id || 1,
           gender: res.data.gender || 'Any',
           employer_email: res.data.employer_email || '',
           employer_phone: res.data.employer_phone || '',
@@ -99,7 +116,10 @@ export default function PostJob({ jobId }: { jobId?: number }) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: name === 'category_id' ? parseInt(value) : value 
+    }));
     setError('');
   };
 
@@ -279,9 +299,9 @@ export default function PostJob({ jobId }: { jobId?: number }) {
                    </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
-                    <Field label="Industry Sector" name="category" value={formData.category} onChange={handleChange} as="select">
+                    <Field label="Industry Sector" name="category_id" value={formData.category_id} onChange={handleChange} as="select">
                       <option value="">Selection required...</option>
-                      {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                      {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </Field>
                     <Field label="Compensation Structure" name="salary" value={formData.salary} onChange={handleChange} placeholder="e.g. ₹50k - ₹80k / Mo" />
                     <Field label="Candidate Benchmark" name="gender" value={formData.gender} onChange={handleChange} as="select">
