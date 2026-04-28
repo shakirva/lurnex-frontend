@@ -26,7 +26,14 @@ export default function FindJobs() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([
+    {id: 1, name: "Accounting"},
+    {id: 2, name: "Engineering"},
+    {id: 3, name: "IT & Technology"},
+    {id: 4, name: "Healthcare"},
+    {id: 5, name: "Design"},
+    {id: 6, name: "Marketing"}
+  ]);
 
   useEffect(() => {
     fetchCategories();

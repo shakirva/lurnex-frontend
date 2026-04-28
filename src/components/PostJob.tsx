@@ -48,7 +48,18 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     employer_phone: '',
   });
 
-  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([
+    {id: 1, name: "Accounting"},
+    {id: 2, name: "Engineering"},
+    {id: 3, name: "IT & Technology"},
+    {id: 4, name: "Healthcare"},
+    {id: 5, name: "Hospitality"},
+    {id: 6, name: "Construction"},
+    {id: 7, name: "Sales"},
+    {id: 8, name: "Marketing"},
+    {id: 9, name: "Education"},
+    {id: 10, name: "Other"}
+  ]);
 
   useEffect(() => {
     fetchCategories();

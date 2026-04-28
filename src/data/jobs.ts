@@ -97,6 +97,19 @@ let mockJobsData: Job[] = [
     requirements: ["Docker", "Kubernetes", "AWS", "CI/CD", "4+ years experience"],
     logo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=60&h=60&fit=crop&crop=face",
     category: "Development"
+  },
+  {
+    id: 1922336,
+    title: "Senior Accountant",
+    company: "Finance Pros",
+    location: "London, UK",
+    type: "Full-time",
+    salary: "$60,000 - $85,000",
+    posted: "1 day ago",
+    description: "Manage financial records and prepare reports. Ensure compliance with accounting standards.",
+    requirements: ["CPA", "QuickBooks", "Tax Prep", "3+ years experience"],
+    logo: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=60&h=60&fit=crop&crop=face",
+    category: "Accounting"
   }
 ];
 

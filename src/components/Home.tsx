@@ -11,6 +11,7 @@ export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,7 +28,19 @@ export default function Home() {
 
   useEffect(() => {
     fetchJobs();
+    fetchCategories();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await apiService.getJobCategories();
+      if (response.success && response.data) {
+        setCategories(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   const fetchJobs = async () => {
     try {
@@ -370,12 +383,14 @@ export default function Home() {
 
           {/* Categories Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from(new Set(jobs.map(job => job.category || 'General'))).map(category => {
-              const jobsInCategory = jobs.filter(job => (job.category || 'General') === category);
+            {categories.map(cat => {
+              const jobsInCategory = jobs.filter(job => 
+                job.category_id === cat.id || job.category_name === cat.name || job.category === cat.name
+              );
               return (
                 <div
-                  key={category}
-                  onClick={() => router.push(`/jobs?category=${category}`)}
+                  key={cat.id}
+                  onClick={() => router.push(`/jobs?category=${cat.name}`)}
                   className="bg-white rounded-2xl p-8 border border-slate-100 relative overflow-hidden cursor-pointer hover:border-indigo-600 hover:shadow-lg transition-all"
                 >
                   <div className="flex flex-col items-center text-center">
@@ -383,10 +398,10 @@ export default function Home() {
                       {/* You can customize SVG/icon per category if needed */}
                       <svg className="w-8 h-8 text-[#1B4696]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="10" stroke="#1B4696" strokeWidth="2" fill="none" />
-                        <text x="12" y="16" textAnchor="middle" fontSize="10" fill="#1B4696">{category[0]}</text>
+                        <text x="12" y="16" textAnchor="middle" fontSize="10" fill="#1B4696">{cat.name[0]}</text>
                       </svg>
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">{category}</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">{cat.name}</h3>
                     <p className="text-slate-500 text-sm font-medium">({jobsInCategory.length} open positions)</p>
                   </div>
                 </div>

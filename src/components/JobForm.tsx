@@ -27,7 +27,19 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
     employer_phone: ''
   });
 
-  const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+  const [categories, setCategories] = useState<{id: number, name: string}[]>([
+    {id: 1, name: "Accounting"},
+    {id: 2, name: "Development"},
+    {id: 3, name: "Design"},
+    {id: 4, name: "Marketing"},
+    {id: 5, name: "Sales"},
+    {id: 6, name: "Management"},
+    {id: 7, name: "Finance"},
+    {id: 8, name: "Customer Service"},
+    {id: 9, name: "Healthcare"},
+    {id: 10, name: "Education"},
+    {id: 11, name: "Engineering"}
+  ]);
   const [requirementInput, setRequirementInput] = useState('');
 
   useEffect(() => {
