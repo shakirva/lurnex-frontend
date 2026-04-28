@@ -69,7 +69,14 @@ export default function PostJob({ jobId }: { jobId?: number }) {
     try {
       const response = await apiService.getJobCategories();
       if (response.success && response.data) {
-        setCategories(response.data);
+        const fetchedCategories = response.data;
+        const hasAccounting = fetchedCategories.some((cat: any) => cat.name === "Accounting");
+        
+        if (!hasAccounting) {
+          setCategories([{ id: 0, name: "Accounting" }, ...fetchedCategories]);
+        } else {
+          setCategories(fetchedCategories);
+        }
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
