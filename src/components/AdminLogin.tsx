@@ -34,7 +34,7 @@ export default function AdminLogin() {
     try {
       // Use only the AuthContext login function - it handles everything
       const success = await login(credentials.username, credentials.password);
-      
+
       if (success) {
         router.push('/admin');
       } else {
@@ -53,15 +53,7 @@ export default function AdminLogin() {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="flex justify-center mb-6">
-            <Image
-              src="/logo.png"
-              alt="TriaGull Logo"
-              width={180}
-              height={55}
-              className="h-16 w-auto"
-            />
-          </div>
+
           <h2 className="text-3xl font-bold text-slate-900">Admin Login</h2>
           <p className="mt-2 text-sm text-slate-600">
             Access the admin dashboard to manage job vacancies
@@ -125,11 +117,10 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all ${
-                loading
+              className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all ${loading
                   ? 'bg-slate-400 cursor-not-allowed'
                   : 'bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] hover:opacity-90'
-              }`}
+                }`}
             >
               {loading ? 'Signing In...' : 'Sign In'}
             </button>

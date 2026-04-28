@@ -81,17 +81,7 @@ export default function Register() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 font-outfit">
       <div className="max-w-lg w-full space-y-8">
         <div className="text-center">
-          <div className="flex justify-center mb-6">
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="TriaGull Logo"
-                width={180}
-                height={55}
-                className="h-16 w-auto"
-              />
-            </Link>
-          </div>
+
           <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Create Account</h2>
           <p className="mt-2 text-sm text-slate-600">
             Join TriaGull to find your dream job or hire top talent
@@ -167,8 +157,8 @@ export default function Register() {
                   type="button"
                   onClick={() => setFormData(p => ({ ...p, role: 'user' }))}
                   className={`py-3 rounded-xl border-2 transition-all font-medium ${formData.role === 'user'
-                      ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]'
-                      : 'border-slate-100 bg-slate-50 text-slate-500 hover:bg-slate-100'
+                    ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]'
+                    : 'border-slate-100 bg-slate-50 text-slate-500 hover:bg-slate-100'
                     }`}
                 >
                   Job Seeker
@@ -177,8 +167,8 @@ export default function Register() {
                   type="button"
                   onClick={() => setFormData(p => ({ ...p, role: 'employer' }))}
                   className={`py-3 rounded-xl border-2 transition-all font-medium ${formData.role === 'employer'
-                      ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]'
-                      : 'border-slate-100 bg-slate-50 text-slate-500 hover:bg-slate-100'
+                    ? 'border-[#1B4696] bg-[#1B4696]/5 text-[#1B4696]'
+                    : 'border-slate-100 bg-slate-50 text-slate-500 hover:bg-slate-100'
                     }`}
                 >
                   Employer
@@ -258,8 +248,8 @@ export default function Register() {
               type="submit"
               disabled={loading}
               className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${loading
-                  ? 'bg-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] hover:opacity-95 hover:shadow-xl'
+                ? 'bg-slate-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] hover:opacity-95 hover:shadow-xl'
                 }`}
             >
               {loading ? 'Creating Account...' : 'Get Started'}

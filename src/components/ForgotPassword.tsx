@@ -35,17 +35,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 font-outfit">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="flex justify-center mb-6">
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="TriaGull Logo"
-                width={180}
-                height={55}
-                className="h-16 w-auto"
-              />
-            </Link>
-          </div>
+
           <h2 className="text-3xl font-bold text-slate-900">Reset Password</h2>
           <p className="mt-2 text-sm text-slate-600">
             Enter your email to receive a password reset link
@@ -92,11 +82,10 @@ export default function ForgotPassword() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${
-                  status === 'loading'
+                className={`w-full py-4 px-4 rounded-xl font-bold text-white shadow-lg shadow-[#1B4696]/20 transition-all transform active:scale-[0.98] ${status === 'loading'
                     ? 'bg-slate-400 cursor-not-allowed'
                     : 'bg-[#1B4696] hover:opacity-95 shadow-xl'
-                }`}
+                  }`}
               >
                 {status === 'loading' ? 'Sending Link...' : 'Send Reset Link'}
               </button>

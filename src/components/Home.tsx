@@ -57,8 +57,7 @@ export default function Home() {
                 Find a job that suits your interest & skills.
               </h1>
               <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                Connect with top employers and find opportunities that match your career goals. Nullam
-                in scelerisque leo, eget sollicitudin velit bestibulum.
+                Connect with top employers and find opportunities that match your career goals.
               </p>
 
               {/* Search Form */}

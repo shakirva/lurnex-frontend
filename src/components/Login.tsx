@@ -64,17 +64,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 font-outfit">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="flex justify-center mb-6">
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="TriaGull Logo"
-                width={180}
-                height={55}
-                className="h-16 w-auto"
-              />
-            </Link>
-          </div>
+
           <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Welcome Back</h2>
           <p className="mt-2 text-sm text-slate-600">
             Sign in to your account to continue
