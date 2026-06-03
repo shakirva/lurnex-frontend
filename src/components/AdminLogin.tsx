@@ -71,7 +71,7 @@ export default function AdminLogin() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-semibold text-slate-700 mb-2">
-                Username
+                Username or Email
               </label>
               <input
                 id="username"
@@ -81,7 +81,7 @@ export default function AdminLogin() {
                 value={credentials.username}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] transition-all"
-                placeholder="Enter your username"
+                placeholder="Enter username or email"
               />
             </div>
 
@@ -118,8 +118,8 @@ export default function AdminLogin() {
               type="submit"
               disabled={loading}
               className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all ${loading
-                  ? 'bg-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] hover:opacity-90'
+                ? 'bg-slate-400 cursor-not-allowed'
+                : 'bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] hover:opacity-90'
                 }`}
             >
               {loading ? 'Signing In...' : 'Sign In'}
@@ -131,7 +131,7 @@ export default function AdminLogin() {
             <h3 className="text-sm font-semibold text-blue-900 mb-2">Demo Credentials:</h3>
             <p className="text-sm text-blue-700">
               <strong>Username:</strong> admin<br />
-              <strong>Password:</strong> admin123
+              <strong>Password:</strong> Triagull@9048A
             </p>
           </div>
 

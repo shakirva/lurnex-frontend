@@ -81,7 +81,7 @@ export default function Login() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-semibold text-slate-700 mb-1.5 ml-1">
-                Username
+                Username or Email
               </label>
               <input
                 id="username"
@@ -91,7 +91,7 @@ export default function Login() {
                 value={credentials.username}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/10 focus:border-[#1B4696] transition-all"
-                placeholder="Enter your username"
+                placeholder="Enter username or email"
               />
             </div>
 
