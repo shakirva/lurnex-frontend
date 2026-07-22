@@ -13,21 +13,55 @@ export default function ServicesPage() {
           {/* Service For Candidate */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-              Service For Candidate
+              Candidate Services
             </h2>
             <div className="space-y-6">
               <div className="text-center">
                 <p className="text-lg italic text-gray-700 mb-2">
-                  "Find out what you like doing best and get someone to pay you doing it"
-                </p>
-                <p className="text-lg italic text-gray-700">
-                  "Choose a job you love and you will never have to work a day in your life"
+                  "Learn. Get Skilled. Get Hired."
                 </p>
               </div>
               
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-600 leading-relaxed">
-                  Evanios Jobs Pvt Ltd is always at the service of our esteemed job seekers, making sure that you get the right job and pursue a satisfying career. Evanios Jobs ensure job seekers can find the best job search portal in India that matches their skills and qualifications. Job seekers can quickly find jobs that match their skills, experience and qualifications with an easy to use interface and a user friendly search engine. Your satisfaction is our prime concern. Our website provides you with free registration possibility and opportunity to upload your bio-data at free of cost. If you register with us, you will be given access to lakhs of matching jobs and the possibility to apply for any number of jobs that you like and your interest. With the personal username and password, we provide, you can login into the website and look for the matching job and apply as well. You could also search in our website for the jobs of your interest from among the lakhs of jobs across India. You will be also notified regularly all through whatsapp all the new matching job vacancies uploaded on our website. If your bio-data gets selected by any employer, you will get the timely alert about that as well through SMS. Lakhs of job seekers who had registered with us are now well-placed in different sectors of their interest, they are our pride….our credentials are displayed through their success in career and life.
+                  At TriaGullJobs, we do more than help you find jobs—we help you build a successful career by combining skill training with placement support.
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  Whether you are a fresher, graduate, or experienced professional looking to upgrade your skills, we provide industry-focused training that improves your employability and prepares you for real workplace requirements.
+                </p>
+
+                <p className="text-gray-800 font-bold mt-4 mb-2">Our Skill Development Programs</p>
+                <ul className="text-gray-600">
+                  <li>Tally Prime</li>
+                  <li>GST Registration & Return Filing</li>
+                  <li>Payroll Processing</li>
+                  <li>MS Office (Excel, Word & PowerPoint)</li>
+                  <li>Digital Marketing</li>
+                  <li>Accounting & Finance</li>
+                  <li>HR & Office Administration</li>
+                  <li>Interview Preparation</li>
+                  <li>Resume Building</li>
+                  <li>Soft Skills & Communication</li>
+                </ul>
+
+                <p className="text-gray-800 font-bold mt-4 mb-2">What You Get</p>
+                <ul className="text-gray-600">
+                  <li>Practical, job-oriented training</li>
+                  <li>Expert guidance from experienced trainers</li>
+                  <li>Placement assistance</li>
+                  <li>Verified job opportunities</li>
+                  <li>Free candidate registration</li>
+                  <li>Resume upload and profile creation</li>
+                  <li>WhatsApp job alerts</li>
+                  <li>Interview notifications</li>
+                  <li>Career guidance and support</li>
+                </ul>
+
+                <p className="text-gray-600 leading-relaxed mt-6">
+                  Our mission is to bridge the gap between education and employment by equipping candidates with the right skills and connecting them with trusted employers across Kerala and beyond.
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  Register with TriaGullJobs today, enhance your skills, and take the next step toward a rewarding career.
                 </p>
               </div>
             </div>
@@ -36,16 +70,71 @@ export default function ServicesPage() {
           {/* Service For Employer */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-              Service For Employer
+              Services for Employers
             </h2>
             <div className="space-y-6">
+              <div className="text-center">
+                <p className="text-lg italic text-gray-700 mb-2">
+                  "Hire Better. Train Smarter. Grow Faster."
+                </p>
+              </div>
+              
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-600 leading-relaxed">
-                  Evanios Jobs are a job portal that provides a hiring tool to help businesses hire people worldwide. Employers can quickly post jobs for free on www.evaniosjobs.com and gain quick access to targeted talent from a large talent pool. This job portal is an effective and cost effective solution for businesses to streamline their hiring process and quickly find suitable candidates.
+                  At TriaGullJobs, we help businesses find the right talent and develop high-performing teams. Our comprehensive recruitment and training solutions are designed to simplify hiring, reduce recruitment costs, and improve employee productivity.
                 </p>
-                
                 <p className="text-gray-600 leading-relaxed">
-                  No more advertisements... No more frantic search for the right candidate… No worry about the quality and qualification of the candidate… Evanios Jobs Pvt Ltd is used as the main tool for talent acquisition by lakhs of recruiters across all kinds and sizes of industry. They appreciate Evanios Jobs services and highly recommend it as the one stop solution to all the hiring needs of a company. Evanios Jobs is a job portal that provides a hiring tool to help businesses hire people worldwide. Employers can quickly post jobs for free on Evanios Jobs and gain quick access to targeted talent from a large talent pool. This job portal is an effective and cost effective solution for businesses to streamline their hiring process and quickly find suitable candidates. Evanios Jobs Pvt Ltd is at the service of all the esteemed employers. We provide you with the right and best candidate at your door step. You are provided the golden opportunity to register the job vacancies on our website at free of cost. If you register with us, you can view and select the matching candidates from among the lakhs of bio-data registered with us. You could also login into the website to search for the right and matching candidates using the username and password we provide you with. We also intimate all the matching candidates all through Whatsapp details regarding the job vacancies available in your esteemed firm or institution. The selected candidates are also informed through Whatsapp, after you have selected them. We will also inform you through whatsapp, details of all the candidates applying for jobs in your esteemed firm or institution. Lakhs of employers and reputed firms registered with us speak volumes of our credibility and state of quality service.
+                  Whether you are a startup, small business, or established organization, TriaGullJobs provides reliable hiring support and professional workforce development.
+                </p>
+
+                <p className="text-gray-800 font-bold mt-4 mb-2">Our Employer Services</p>
+                
+                <p className="text-gray-800 font-semibold mt-4 mb-2">Recruitment & Talent Acquisition</p>
+                <ul className="text-gray-600">
+                  <li>Free job posting on TriaGullJobs</li>
+                  <li>Access to a database of verified candidates</li>
+                  <li>Candidate screening and shortlisting</li>
+                  <li>Resume filtering based on your requirements</li>
+                  <li>Interview scheduling and coordination</li>
+                  <li>Bulk hiring support</li>
+                  <li>Permanent and temporary staffing solutions</li>
+                </ul>
+
+                <p className="text-gray-800 font-semibold mt-4 mb-2">Corporate Training & Staff Development</p>
+                <ul className="text-gray-600">
+                  <li>Sales Training</li>
+                  <li>Marketing & Business Development Training</li>
+                  <li>Customer Service Excellence</li>
+                  <li>Telecalling & Communication Skills</li>
+                  <li>HR & Recruitment Training</li>
+                  <li>Office Administration Training</li>
+                  <li>MS Office & Advanced Excel</li>
+                  <li>Tally Prime & Accounting</li>
+                  <li>GST & Payroll Management</li>
+                  <li>Digital Marketing</li>
+                  <li>Leadership and Team Building</li>
+                </ul>
+
+                <p className="text-gray-800 font-bold mt-4 mb-2">Why Choose TriaGullJobs?</p>
+                <ul className="text-gray-600">
+                  <li>Verified and skilled candidates</li>
+                  <li>Faster hiring process</li>
+                  <li>Cost-effective recruitment solutions</li>
+                  <li>Industry-specific hiring support</li>
+                  <li>Professional staff training programs</li>
+                  <li>Dedicated employer assistance</li>
+                  <li>WhatsApp updates on suitable candidates</li>
+                  <li>Customized hiring solutions for every business</li>
+                </ul>
+
+                <p className="text-gray-600 leading-relaxed mt-6">
+                  Our experienced recruitment team works closely with employers to understand their workforce requirements and deliver candidates who match the required skills, experience, and company culture.
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  At TriaGullJobs, we believe that the right people build successful businesses. From recruitment to employee training, we are your trusted partner in building a skilled and productive workforce.
+                </p>
+                <p className="text-gray-600 leading-relaxed font-semibold">
+                  Partner with TriaGullJobs today and build a stronger team for tomorrow.
                 </p>
               </div>
             </div>
