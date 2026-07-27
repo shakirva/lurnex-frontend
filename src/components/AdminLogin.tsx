@@ -80,7 +80,7 @@ export default function AdminLogin() {
                 required
                 value={credentials.username}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] transition-all"
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] transition-all"
                 placeholder="Enter username or email"
               />
             </div>
@@ -97,7 +97,7 @@ export default function AdminLogin() {
                   required
                   value={credentials.password}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] transition-all"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] transition-all"
                   placeholder="Enter your password"
                 />
                 <button
@@ -119,7 +119,7 @@ export default function AdminLogin() {
               disabled={loading}
               className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all ${loading
                 ? 'bg-slate-400 cursor-not-allowed'
-                : 'bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] hover:opacity-90'
+                : 'bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] hover:opacity-90'
                 }`}
             >
               {loading ? 'Signing In...' : 'Sign In'}
@@ -139,7 +139,7 @@ export default function AdminLogin() {
           <div className="mt-6 text-center">
             <a
               href="/"
-              className="text-sm text-slate-600 hover:text-[#1B4696] transition-colors"
+              className="text-sm text-slate-600 hover:text-[#EC1D23] transition-colors"
             >
               ← Back to Home
             </a>

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type Job, apiService } from "@/lib/api";
-import ApplicationFormModal from "./ApplicationFormModal";
 
 interface JobDetailProps {
   jobId: string;
@@ -14,8 +13,6 @@ interface JobDetailProps {
 export default function JobDetail({ jobId }: JobDetailProps) {
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
-  const [applied, setApplied] = useState(false);
-  const [showForm, setShowForm] = useState(false);
 
   const router = useRouter();
 
@@ -45,17 +42,13 @@ export default function JobDetail({ jobId }: JobDetailProps) {
     fetchJob();
   }, [jobId]);
 
-  const handleApply = () => {
-    setShowForm(true);
-  };
-
 
   if (loading) {
 
     return (
       <div className="min-h-screen bg-slate-50 pt-24 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#1B4696] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-4 border-[#EC1D23] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600">Loading job details...</p>
         </div>
       </div>
@@ -75,7 +68,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
           <p className="text-slate-600 mb-6">The job you're looking for doesn't exist or has been removed.</p>
           <Link
             href="/jobs"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -105,18 +98,10 @@ export default function JobDetail({ jobId }: JobDetailProps) {
 
         {/* Job Header */}
         <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 mb-8 overflow-hidden relative">
-          {job.is_masked && (
-            <div className="absolute top-0 right-0">
-              <div className="bg-slate-900 text-white text-[10px] font-bold px-4 py-1.5 uppercase tracking-widest origin-top-right rotate-45 translate-x-8 translate-y-3 shadow-sm">
-                Locked
-              </div>
-            </div>
-          )}
-
           <div className="flex items-start justify-between mb-6">
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-slate-900 mb-2">
-                {job.title} Job Opening {job.is_masked ? '' : `at ${job.company}`}
+                {job.title} Job Opening at {job.company}
               </h1>
               <div className="flex items-center gap-2 text-slate-600 mb-4">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,41 +118,17 @@ export default function JobDetail({ jobId }: JobDetailProps) {
 
           {/* Apply Button / Upgrade Banner */}
           <div className="mb-10">
-            {job.is_masked ? (
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-white shrink-0">
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-900">Subscription Required</h3>
-                    <p className="text-sm text-slate-500">Subscribe to a plan to see full details and apply for this job.</p>
-                  </div>
-                </div>
-                <Link
-                  href="/subscription"
-                  className="w-full md:w-auto px-8 py-3 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 transition-all text-center"
-                >
-                  View Plans & Unlock
-                </Link>
-              </div>
-            ) : (
-              <button
-                onClick={handleApply}
-                disabled={applied}
-                className={`flex items-center gap-2 px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-md active:scale-95 ${applied
-                  ? "bg-green-100 text-green-700 cursor-not-allowed"
-                  : "bg-slate-900 text-white hover:bg-slate-800"
-                  }`}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                {applied ? "ALREADY APPLIED" : "APPLY FOR THIS JOB"}
-              </button>
-            )}
+            <a
+              href={`https://wa.me/917510668644?text=${encodeURIComponent(`Hi, I'm interested in the "${job.title}" position at "${job.company}". Could you provide more details?`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-md active:scale-95 bg-green-500 text-white hover:bg-green-600 inline-flex w-fit"
+            >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+              </svg>
+              INQUIRE VIA WHATSAPP
+            </a>
           </div>
 
           {/* Job Details Section */}
@@ -181,16 +142,10 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                   </svg>
                   Job Description
                 </h3>
-                <div className={`relative ${job.is_masked ? 'p-4' : ''}`}>
-                  <p className={`text-slate-600 leading-relaxed whitespace-pre-line ${job.is_masked ? 'blur-[3px] select-none' : ''}`}>
+                <div className="relative">
+                  <p className="text-slate-600 leading-relaxed whitespace-pre-line">
                     {job.description}
                   </p>
-                  {job.is_masked && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] rounded-lg border border-slate-100 p-6 text-center">
-                      <p className="text-slate-900 font-bold mb-2">Content Locked</p>
-                      <p className="text-sm text-slate-500 max-w-sm">Full job description is only available to subscribed members.</p>
-                    </div>
-                  )}
                 </div>
               </section>
 
@@ -202,7 +157,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                   </svg>
                   Requirements
                 </h3>
-                <ul className={`space-y-3 ${job.is_masked ? 'blur-[3px] select-none opacity-50' : ''}`}>
+                <ul className="space-y-3">
                   {job.requirements.map((req, i) => (
                     <li key={i} className="flex items-start gap-3 text-slate-600">
                       <span className="mt-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full shrink-0" />
@@ -226,7 +181,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 font-bold uppercase">Salary</p>
-                      <p className={`font-bold ${job.is_masked ? 'text-slate-400 italic' : 'text-slate-900'}`}>{job.salary}</p>
+                      <p className="font-bold text-slate-900">{job.salary}</p>
                     </div>
                   </div>
 
@@ -238,8 +193,8 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 font-bold uppercase">Company</p>
-                      <p className={`font-bold ${job.is_masked ? 'text-slate-400 italic' : 'text-slate-900'}`}>
-                        {job.is_masked ? 'Locked' : job.company}
+                      <p className="font-bold text-slate-900">
+                        {job.company}
                       </p>
                     </div>
                   </div>
@@ -264,7 +219,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 font-bold uppercase">Employer Email</p>
-                      <p className={`font-bold ${job.is_masked ? 'text-slate-400 italic' : 'text-slate-900'}`}>
+                      <p className="font-bold text-slate-900">
                         {job.employer_email || 'Not provided'}
                       </p>
                     </div>
@@ -278,7 +233,7 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                     </div>
                     <div>
                       <p className="text-xs text-slate-400 font-bold uppercase">Employer Phone</p>
-                      <p className={`font-bold ${job.is_masked ? 'text-slate-400 italic' : 'text-slate-900'}`}>
+                      <p className="font-bold text-slate-900">
                         {job.employer_phone || 'Not provided'}
                       </p>
                     </div>
@@ -288,13 +243,6 @@ export default function JobDetail({ jobId }: JobDetailProps) {
             </div>
           </div>
         </div>
-
-        {/* Application Form Modal */}
-        <ApplicationFormModal
-          job={job}
-          isOpen={showForm}
-          onClose={() => setShowForm(false)}
-        />
       </div>
     </div>
   );

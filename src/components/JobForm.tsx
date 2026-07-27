@@ -153,7 +153,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   value={formData.title}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   placeholder="e.g., Senior Frontend Developer"
                 />
               </div>
@@ -167,7 +167,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   value={formData.company}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   placeholder="e.g., Acme Corp, Google, TriaGull"
                 />
               </div>
@@ -183,7 +183,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   name="employer_email"
                   value={formData.employer_email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   placeholder="e.g., hr@company.com"
                 />
               </div>
@@ -196,7 +196,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   name="employer_phone"
                   value={formData.employer_phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   placeholder="e.g., +1 234 567 890"
                 />
               </div>
@@ -213,7 +213,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   value={formData.location}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   placeholder="e.g., Dubai, UAE"
                 />
               </div>
@@ -226,7 +226,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   value={formData.category_id}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                 >
                   {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -245,7 +245,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   value={formData.type}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                 >
                   {jobTypes.map(type => (
                     <option key={type} value={type}>{type}</option>
@@ -262,7 +262,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   value={formData.salary}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   placeholder="e.g., $80,000 - $120,000"
                 />
               </div>
@@ -279,7 +279,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                 onChange={handleInputChange}
                 required
                 rows={4}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                 placeholder="Describe the job responsibilities, requirements, and what the candidate will be doing..."
               />
             </div>
@@ -294,7 +294,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                 onChange={(e) => setRequirementInput(e.target.value)}
                 required
                 rows={3}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                 placeholder="Enter job requirements (e.g., 3+ years experience in React, TypeScript, Next.js)"
               />
             </div>
@@ -308,7 +308,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   name="foodAccommodation"
                   value={formData.foodAccommodation}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                 >
                   <option value="">Select Option</option>
                   <option value="Provided">Provided</option>
@@ -324,7 +324,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
                   name="gender"
                   value={formData.gender}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                 >
                   <option value="">Any</option>
                   <option value="Male">Male</option>
@@ -345,7 +345,7 @@ export default function JobForm({ job, onSubmit, onClose }: JobFormProps) {
               </button>
               <button
                 type="submit"
-                className="flex-1 px-6 py-3 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
+                className="flex-1 px-6 py-3 bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
               >
                 {job ? 'Update Job' : 'Create Job'}
               </button>

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-[#1B4696] to-[#2FBDB9] pt-8 pb-6">
+    <footer className="bg-gradient-to-br from-[#EC1D23] to-[#2FBDB9] pt-8 pb-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="flex items-center space-x-3 mb-4">
               <Image src="/logo.png" alt="TriaGull Logo" width={48} height={48} className="rounded-xl" />
               {/* <div>
-                <h3 className="text-xl font-bold bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] bg-clip-text text-transparent">TriaGull</h3>
+                <h3 className="text-xl font-bold bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] bg-clip-text text-transparent">TriaGull</h3>
                 <p className="text-xs text-slate-500">Find your dream job</p>
               </div> */}
             </div>

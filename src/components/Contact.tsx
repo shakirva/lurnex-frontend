@@ -68,7 +68,7 @@ export default function Contact() {
         <div className="text-center mb-16">
           
           <h1 className="text-5xl font-bold text-slate-900 mb-6">
-            Get in <span className="bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] bg-clip-text text-transparent">Touch</span>
+            Get in <span className="bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] bg-clip-text text-transparent">Touch</span>
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Have questions or need assistance? We're here to help you find your dream job or the perfect candidate.
@@ -107,7 +107,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] text-slate-700 transition-all duration-200"
                     placeholder="Your full name"
                   />
                 </div>
@@ -122,7 +122,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] text-slate-700 transition-all duration-200"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -140,7 +140,7 @@ export default function Contact() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] text-slate-700 transition-all duration-200"
                     placeholder="+1 (555) 123-4567"
                   />
                 </div>
@@ -154,7 +154,7 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] text-slate-700 appearance-none cursor-pointer"
                   >
                     <option value="">Select a subject</option>
                     <option value="General Inquiry">General Inquiry</option>
@@ -180,7 +180,7 @@ export default function Contact() {
                   onChange={handleInputChange}
                   rows={6}
                   required
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 transition-all duration-200 resize-none"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] text-slate-700 transition-all duration-200 resize-none"
                   placeholder="Tell us how we can help you..."
                 />
               </div>
@@ -189,7 +189,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-8 py-4 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full px-8 py-4 bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>

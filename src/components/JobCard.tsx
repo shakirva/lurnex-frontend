@@ -13,10 +13,10 @@ export default function JobCard({ job }: JobCardProps) {
   const [showApplicationForm, setShowApplicationForm] = useState(false);
 
   return (
-    <div className="group relative bg-white rounded-lg border border-slate-200 hover:border-[#1B4696] hover:shadow-lg transition-all duration-300 p-6 flex flex-col h-full">
+    <div className="group relative bg-white rounded-lg border border-slate-200 hover:border-[#EC1D23] hover:shadow-lg transition-all duration-300 p-6 flex flex-col h-full">
       <div className="mb-6">
         <div className="flex justify-between items-start gap-4 mb-3">
-          <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#1B4696] transition-colors line-clamp-2 flex-1">
+          <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#EC1D23] transition-colors line-clamp-2 flex-1">
             {job.title}
           </h3>
           <span className="shrink-0 bg-green-50 text-green-600 text-[10px] font-bold px-2.5 py-1.5 rounded uppercase tracking-wider">
@@ -70,7 +70,7 @@ export default function JobCard({ job }: JobCardProps) {
         ) : (
           <button
             onClick={() => setShowApplicationForm(true)}
-            className="flex-[2] bg-[#1B4696] cursor-pointer hover:bg-[#153a7a] text-white py-2.5 px-4 rounded-md font-bold text-sm transition-colors duration-200 shadow-sm"
+            className="flex-[2] bg-[#EC1D23] cursor-pointer hover:bg-[#153a7a] text-white py-2.5 px-4 rounded-md font-bold text-sm transition-colors duration-200 shadow-sm"
           >
             Apply Now
           </button>

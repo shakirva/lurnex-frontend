@@ -28,35 +28,20 @@ export default function AdminDashboard() {
   const [showJobForm, setShowJobForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'jobs' | 'messages' | 'employers' | 'candidates' | 'applications'>('jobs');
+  const [activeTab, setActiveTab] = useState<'jobs' | 'messages' | 'managers'>('jobs');
 
   const [contactMessages, setContactMessages] = useState<any[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
-  const [employers, setEmployers] = useState<any[]>([]);
-  const [loadingEmployers, setLoadingEmployers] = useState(false);
-  const [candidates, setCandidates] = useState<any[]>([]);
-  const [loadingCandidates, setLoadingCandidates] = useState(false);
-  const [applications, setApplications] = useState<any[]>([]);
-  const [loadingApplications, setLoadingApplications] = useState(false);
-  const [selectedApplication, setSelectedApplication] = useState<any>(null);
-  const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const [managers, setManagers] = useState<any[]>([]);
+  const [loadingManagers, setLoadingManagers] = useState(false);
 
-  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
-  const [userRoleForModal, setUserRoleForModal] = useState<'employer' | 'user'>('employer');
-  const [selectedUserForSub, setSelectedUserForSub] = useState<any>(null);
-
-
-  const [selectedPlan, setSelectedPlan] = useState('premium');
-  const [isSubmittingSub, setIsSubmittingSub] = useState(false);
 
   useEffect(() => {
     fetchJobs();
 
     fetchContactMessages();
-    fetchEmployers();
-    fetchCandidates();
-    fetchApplications();
+    fetchManagers();
   }, []);
 
 
@@ -65,14 +50,8 @@ export default function AdminDashboard() {
     if (activeTab === 'messages') {
       fetchContactMessages();
     }
-    if (activeTab === 'employers') {
-      fetchEmployers();
-    }
-    if (activeTab === 'candidates') {
-      fetchCandidates();
-    }
-    if (activeTab === 'applications') {
-      fetchApplications();
+    if (activeTab === 'managers') {
+      fetchManagers();
     }
   }, [activeTab]);
 
@@ -98,10 +77,10 @@ export default function AdminDashboard() {
     setLoadingMessages(false);
   };
 
-  const fetchEmployers = async () => {
-    setLoadingEmployers(true);
+  const fetchManagers = async () => {
+    setLoadingManagers(true);
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/employers', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/admin/users/managers', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           'Content-Type': 'application/json',
@@ -109,55 +88,24 @@ export default function AdminDashboard() {
       });
       if (response.ok) {
         const data = await response.json();
-        setEmployers(data.data || data || []);
+        setManagers(data.data || data || []);
       } else {
-        setEmployers([]);
+        setManagers([]);
       }
     } catch {
-      setEmployers([]);
+      setManagers([]);
     }
-    setLoadingEmployers(false);
-  };
-
-  const fetchCandidates = async () => {
-    setLoadingCandidates(true);
-    try {
-      const response = await apiService.getCandidates();
-      if (response.success && response.data) {
-        setCandidates(response.data);
-      } else {
-        setCandidates([]);
-      }
-    } catch {
-      setCandidates([]);
-    }
-    setLoadingCandidates(false);
-  };
-
-  const fetchApplications = async () => {
-    setLoadingApplications(true);
-    try {
-      const response = await apiService.getApplications();
-      if (response.success && response.data) {
-        setApplications(response.data);
-      } else {
-        setApplications([]);
-      }
-    } catch (err) {
-      setApplications([]);
-    }
-    setLoadingApplications(false);
+    setLoadingManagers(false);
   };
 
 
-  const handleUserStatusUpdate = async (userId: number, currentStatus: boolean, type: 'employer' | 'candidate') => {
+  const handleUserStatusUpdate = async (userId: number, currentStatus: boolean) => {
     const action = currentStatus ? 'deactivate' : 'activate';
     if (confirm(`Are you sure you want to ${action} this user?`)) {
       try {
         const response = await apiService.updateUserStatus(userId, !currentStatus);
         if (response.success) {
-          if (type === 'employer') fetchEmployers();
-          else fetchCandidates();
+          fetchManagers();
         }
       } catch (err) {
         console.error('Status update failed:', err);
@@ -165,13 +113,12 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDeleteUser = async (userId: number, type: 'employer' | 'candidate') => {
+  const handleDeleteUser = async (userId: number) => {
     if (confirm('CRITICAL: This will permanently delete the user and all associated data. Continue?')) {
       try {
         const response = await apiService.deleteUser(userId);
         if (response.success) {
-          if (type === 'employer') fetchEmployers();
-          else fetchCandidates();
+          fetchManagers();
         }
       } catch (err) {
         console.error('Deletion failed:', err);
@@ -248,26 +195,7 @@ export default function AdminDashboard() {
     setEditingJob(null);
   };
 
-  const handleEnableSubscription = async () => {
-    if (!selectedUserForSub) return;
 
-    setIsSubmittingSub(true);
-    try {
-      const response = await apiService.enableSubscription(selectedUserForSub.id, selectedPlan);
-      if (response.success) {
-        alert(`Subscription enabled for ${selectedUserForSub.username}`);
-        setShowSubscriptionModal(false);
-        if (activeTab === 'employers') fetchEmployers();
-        else if (activeTab === 'candidates') fetchCandidates();
-      } else {
-        setError(response.message || 'Failed to enable subscription');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to enable subscription');
-    } finally {
-      setIsSubmittingSub(false);
-    }
-  };
 
 
 
@@ -279,8 +207,7 @@ export default function AdminDashboard() {
       if (response.success) {
         alert('User registered successfully');
         setShowUserModal(false);
-        if (userData.role === 'employer') fetchEmployers();
-        else fetchCandidates();
+        fetchManagers();
       } else {
         setError(response.message || 'Failed to register user');
       }
@@ -339,7 +266,7 @@ export default function AdminDashboard() {
         {/* Stats Card Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center py-6">
-            <FaBriefcase className="w-8 h-8 text-[#1B4696] mb-2" />
+            <FaBriefcase className="w-8 h-8 text-[#EC1D23] mb-2" />
             <div className="text-2xl font-bold text-slate-900">{jobs.length}</div>
             <div className="text-slate-500">Total Jobs</div>
           </div>
@@ -362,7 +289,7 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setActiveTab('jobs')}
                 className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'jobs'
-                  ? 'border-[#1B4696] text-[#1B4696]'
+                  ? 'border-[#EC1D23] text-[#EC1D23]'
                   : 'border-transparent text-slate-500 hover:text-slate-700'
                   }`}
               >
@@ -371,38 +298,20 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setActiveTab('messages')}
                 className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'messages'
-                  ? 'border-[#1B4696] text-[#1B4696]'
+                  ? 'border-[#EC1D23] text-[#EC1D23]'
                   : 'border-transparent text-slate-500 hover:text-slate-700'
                   }`}
               >
                 Messages
               </button>
               <button
-                onClick={() => setActiveTab('employers')}
-                className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'employers'
-                  ? 'border-[#1B4696] text-[#1B4696]'
+                onClick={() => setActiveTab('managers')}
+                className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'managers'
+                  ? 'border-[#EC1D23] text-[#EC1D23]'
                   : 'border-transparent text-slate-500 hover:text-slate-700'
                   }`}
               >
-                Employers
-              </button>
-              <button
-                onClick={() => setActiveTab('candidates')}
-                className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'candidates'
-                  ? 'border-[#1B4696] text-[#1B4696]'
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-              >
-                Candidates
-              </button>
-              <button
-                onClick={() => setActiveTab('applications')}
-                className={`pb-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'applications'
-                  ? 'border-[#1B4696] text-[#1B4696]'
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-              >
-                Applications
+                Managers
               </button>
             </div>
           </div>
@@ -466,7 +375,7 @@ export default function AdminDashboard() {
                     placeholder="Search jobs..."
                     value={jobSearchQuery}
                     onChange={(e) => setJobSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4696]/20 focus:border-[#1B4696]"
+                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23]"
                   />
                   <div className="absolute left-3 top-2.5 text-slate-400">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -548,35 +457,32 @@ export default function AdminDashboard() {
         )}
 
 
-        {/* Employer Details */}
-        {activeTab === 'employers' && (
+        {/* Manager Details */}
+        {activeTab === 'managers' && (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
               <div>
-                <h2 className="text-lg font-semibold text-slate-900">Registered Employers</h2>
-                <p className="text-sm text-slate-500 mt-0.5">View details of all employer accounts</p>
+                <h2 className="text-lg font-semibold text-slate-900">Registered Managers</h2>
+                <p className="text-sm text-slate-500 mt-0.5">View details of all manager accounts</p>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-500">{employers.length} total</span>
+                <span className="text-sm font-medium text-slate-500">{managers.length} total</span>
                 <button
-                  onClick={() => {
-                    setUserRoleForModal('employer');
-                    setShowUserModal(true);
-                  }}
+                  onClick={() => setShowUserModal(true)}
                   className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors flex items-center gap-2"
                 >
                   <FaPlus className="w-3 h-3" />
-                  Register Employer
+                  Register Manager
                 </button>
               </div>
             </div>
 
             <div className="overflow-x-auto">
-              {loadingEmployers ? (
+              {loadingManagers ? (
                 <div className="p-8 text-center text-slate-500">Loading...</div>
-              ) : employers.length === 0 ? (
+              ) : managers.length === 0 ? (
                 <div className="p-10 text-center">
-                  <p className="text-slate-400">No employers have registered yet.</p>
+                  <p className="text-slate-400">No managers have registered yet.</p>
                 </div>
               ) : (
                 <table className="w-full">
@@ -590,28 +496,28 @@ export default function AdminDashboard() {
                   </thead>
 
                   <tbody className="bg-white divide-y divide-slate-200">
-                    {employers.map((emp: any) => (
-                      <tr key={emp.id} className="hover:bg-slate-50 transition-colors">
+                    {managers.map((mgr: any) => (
+                      <tr key={mgr.id} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
 
                             <div className="flex flex-col">
-                              <span className="font-bold text-slate-900">{emp.first_name} {emp.last_name}</span>
-                              <span className="text-xs text-slate-500">@{emp.username}</span>
+                              <span className="font-bold text-slate-900">{mgr.first_name} {mgr.last_name}</span>
+                              <span className="text-xs text-slate-500">@{mgr.username}</span>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-700">
-                          <div className="font-medium text-slate-900">{emp.company_name || '—'}</div>
-                          <div className="text-xs text-slate-400 mt-0.5">{emp.email}</div>
+                          <div className="font-medium text-slate-900">{mgr.company_name || '—'}</div>
+                          <div className="text-xs text-slate-400 mt-0.5">{mgr.email}</div>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <span className="text-sm font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full">{emp.job_posted_count || 0}</span>
+                          <span className="text-sm font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full">{mgr.job_posted_count || 0}</span>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() => handleDeleteUser(emp.id, 'employer')}
+                              onClick={() => handleDeleteUser(mgr.id)}
                               className="w-9 h-9 flex items-center justify-center border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
                               title="Delete Permanently"
                             >
@@ -629,201 +535,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Candidate Details */}
-        {activeTab === 'candidates' && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-            <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Registered Candidates</h2>
-                <p className="text-sm text-slate-500 mt-0.5">View and manage job seeker subscriptions</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-500">{candidates.length} total</span>
-                <button
-                  onClick={() => {
-                    setUserRoleForModal('user');
-                    setShowUserModal(true);
-                  }}
-                  className="bg-[#2FBDB9] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#28a7a4] transition-colors flex items-center gap-2"
-                >
-                  <FaPlus className="w-3 h-3" />
-                  Register Candidate
-                </button>
-              </div>
-            </div>
 
-            <div className="overflow-x-auto">
-              {loadingCandidates ? (
-                <div className="p-8 text-center text-slate-500">Loading...</div>
-              ) : candidates.length === 0 ? (
-                <div className="p-10 text-center">
-                  <p className="text-slate-400">No candidates have registered yet.</p>
-                </div>
-              ) : (
-                <table className="w-full">
-                  <thead className="bg-slate-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Job Seeker</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Contact Info</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Plan & Experience</th>
-                      <th className="px-6 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest">Applications</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="bg-white divide-y divide-slate-200">
-                    {candidates.map((cand: any) => (
-                      <tr key={cand.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-
-                            <div className="flex flex-col">
-                              <span className="font-bold text-slate-900">{cand.first_name} {cand.last_name}</span>
-                              <span className="text-xs text-slate-500">@{cand.username}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-700">
-                          <div className="text-slate-900 font-medium">{cand.email}</div>
-                          <div className="text-xs text-slate-400 mt-0.5">{cand.phone || 'No phone provided'}</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${cand.is_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
-                            }`}>
-                            {cand.is_active ? '● Active' : '○ Inactive'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="space-y-3">
-                            {cand.plan_name ? (
-                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-[#1B4696] bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100">
-                                  {cand.plan_name}
-                                  <span className=" ml-1.5 opacity-80">({new Date(cand.plan_expires_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()})</span>
-                                </span>
-                              </div>
-                            ) : (
-                              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 w-fit">Free Account</span>
-                            )}
-
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-
-                          <span className="text-sm font-black text-slate-900 bg-slate-100 px-3 py-1 rounded-full">{cand.application_count || 0}</span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => {
-                                setSelectedUserForSub(cand);
-                                setShowSubscriptionModal(true);
-                              }}
-                              className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 bg-[#1B4696] text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-indigo-700 transition-all shadow-sm shadow-blue-200"
-                            >
-                              <FaCreditCard className="w-3 h-3" />
-                              Sub
-                            </button>
-                            <button
-                              onClick={() => handleUserStatusUpdate(cand.id, cand.is_active, 'candidate')}
-                              className={`w-9 h-9 flex items-center justify-center rounded-lg border transition-all ${cand.is_active
-                                ? 'border-orange-200 text-orange-600 hover:bg-orange-50'
-                                : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50'
-                                }`}
-                              title={cand.is_active ? "Deactivate Job Seeker" : "Activate Job Seeker"}
-                            >
-                              {cand.is_active ? <FaBan className="w-4 h-4" /> : <FaCheckCircle className="w-4 h-4" />}
-                            </button>
-                            <button
-                              onClick={() => handleDeleteUser(cand.id, 'candidate')}
-                              className="w-9 h-9 flex items-center justify-center border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
-                              title="Delete Account"
-                            >
-                              <FaTrash className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-
-                </table>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Application Details */}
-        {activeTab === 'applications' && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-            <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">Job Applications</h2>
-                <p className="text-sm text-slate-500 mt-0.5">View and track all job applications</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-500">{applications.length} total</span>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              {loadingApplications ? (
-                <div className="p-8 text-center text-slate-500">Loading...</div>
-              ) : applications.length === 0 ? (
-                <div className="p-10 text-center">
-                  <p className="text-slate-400">No applications found.</p>
-                </div>
-              ) : (
-                <table className="w-full">
-                  <thead className="bg-slate-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Candidate</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Job Title</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Company</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Applied on</th>
-                      <th className="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="bg-white divide-y divide-slate-200">
-                    {applications.map((app: any) => (
-                      <tr key={app.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-slate-900">{app.applicant_name}</span>
-                            <span className="text-xs text-slate-500">{app.applicant_email}</span>
-                            {app.applicant_phone && <span className="text-[10px] text-slate-400 mt-0.5">{app.applicant_phone}</span>}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-700">
-                          <div className="font-medium text-slate-900">{app.job_title || 'Unknown Job'}</div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-700">
-                          <div className="text-slate-600">{app.company_name || 'N/A'}</div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
-                          {new Date(app.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                        </td>
-                        <td className="px-6 py-4">
-                          <button
-                            onClick={() => {
-                              setSelectedApplication(app);
-                              setShowApplicationModal(true);
-                            }}
-                            className="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors"
-                          >
-                            View Details
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
-        )}
 
       </div>
 
@@ -836,85 +548,8 @@ export default function AdminDashboard() {
         />
       )}
 
-      {/* Subscription Modal */}
-      {showSubscriptionModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-slate-900">Enable Subscription</h3>
-              <button
-                onClick={() => setShowSubscriptionModal(false)}
-                className="text-slate-400 hover:text-slate-600"
-              >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-6">
-              <div className="mb-6">
-                <p className="text-sm text-slate-500 mb-1">Activating for</p>
-                <p className="text-lg font-semibold text-[#1B4696]">
-                  {selectedUserForSub?.first_name} {selectedUserForSub?.last_name}
-                  <span className="text-slate-400 font-normal text-sm ml-2">(@{selectedUserForSub?.username})</span>
-                </p>
-              </div>
 
 
-              <div className="space-y-4">
-                <label className="block text-sm font-medium text-slate-700">Select Subscription Plan</label>
-                <div className="grid grid-cols-1 gap-3">
-                  {[
-                    { id: 'basic', name: 'Basic (3 Months)', price: '₹599' },
-                    { id: 'standard', name: 'Standard (6 Months)', price: '₹899' },
-                    { id: 'premium', name: 'Premium (1 Year)', price: '₹1299' },
-                    { id: 'accountant', name: 'Accountant (1 Year)', price: '₹3,999' },
-                  ].map((plan) => (
-                    <label
-                      key={plan.id}
-                      className={`relative flex items-center p-4 cursor-pointer border rounded-xl transition-all ${selectedPlan === plan.id
-                        ? 'border-[#1B4696] bg-blue-50/50'
-                        : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                    >
-                      <input
-                        type="radio"
-                        name="plan"
-                        className="w-4 h-4 text-[#1B4696] border-slate-300 focus:ring-[#1B4696]"
-                        checked={selectedPlan === plan.id}
-                        onChange={() => setSelectedPlan(plan.id)}
-                      />
-                      <div className="ml-4 flex justify-between w-full">
-                        <span className="font-medium text-slate-900">{plan.name}</span>
-                        <span className="text-[#1B4696] font-bold">{plan.price}</span>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-8 flex gap-3">
-                <button
-                  onClick={() => setShowSubscriptionModal(false)}
-                  className="flex-1 px-4 py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleEnableSubscription}
-                  disabled={isSubmittingSub}
-                  className="flex-1 px-4 py-2 bg-[#1B4696] text-white rounded-lg hover:bg-[#153a7a] transition-colors disabled:opacity-50"
-                >
-                  {isSubmittingSub ? 'Processing...' : 'Activate Now'}
-                </button>
-              </div>
-              <p className="mt-4 text-xs text-center text-slate-400">
-                This will record an offline payment and grant immediate access.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* User Registration Modal */}
       {showUserModal && (
@@ -922,7 +557,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
               <h3 className="text-xl font-bold text-slate-900">
-                Register {userRoleForModal === 'employer' ? 'Employer' : 'Candidate'}
+                Register Manager
               </h3>
               <button
                 onClick={() => setShowUserModal(false)}
@@ -938,48 +573,39 @@ export default function AdminDashboard() {
                 e.preventDefault();
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
-                handleRegisterUser({ ...data, role: userRoleForModal });
+                handleRegisterUser({ ...data, role: 'manager' });
               }}
               className="p-6 space-y-4"
             >
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">First Name</label>
-                  <input name="first_name" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
+                  <input name="first_name" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Last Name</label>
-                  <input name="last_name" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
+                  <input name="last_name" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Username</label>
-                <input name="username" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
+                <input name="username" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Email Address</label>
-                <input name="email" type="email" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
+                <input name="email" type="email" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" />
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Password</label>
-                <input name="password" type="password" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
+                <input name="password" type="password" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" />
               </div>
-              {userRoleForModal === 'employer' && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Company Name</label>
-                  <input name="company_name" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
-                </div>
-              )}
-              {userRoleForModal === 'user' && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Experience (Years)</label>
-                  <input name="experience_years" type="number" min="0" required defaultValue="0" className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" />
-                </div>
-              )}
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Company Name</label>
+                <input name="company_name" required className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" />
+              </div>
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Phone Number</label>
-
-                <input name="phone" className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1B4696] outline-none" placeholder="+91..." />
+                <input name="phone" className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#EC1D23] outline-none" placeholder="+91..." />
               </div>
               <div className="pt-4 flex gap-3">
                 <button
@@ -991,7 +617,7 @@ export default function AdminDashboard() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[#1B4696] text-white rounded-lg hover:bg-[#153a7a] transition-colors"
+                  className="flex-1 px-4 py-2 bg-[#EC1D23] text-white rounded-lg hover:bg-[#153a7a] transition-colors"
                 >
                   Create Account
                 </button>
@@ -1001,94 +627,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Application Detail Modal */}
-      {showApplicationModal && selectedApplication && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-fadeIn">
-            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-              <h3 className="text-xl font-bold text-slate-900">Application Review</h3>
-              <button
-                onClick={() => setShowApplicationModal(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-8 max-h-[80vh] overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Left Column: Basic Info */}
-                <div className="space-y-8">
-                  <div>
-                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Info</h4>
-                    <p className="text-xl font-black text-slate-900">{selectedApplication.applicant_name}</p>
-                    <p className="text-slate-500 font-medium text-sm">{selectedApplication.applicant_email}</p>
-                    {selectedApplication.applicant_phone && (
-                      <p className="text-slate-400 text-xs mt-1">Contact: {selectedApplication.applicant_phone}</p>
-                    )}
-                  </div>
 
-                  <div>
-                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Applied For</h4>
-                    <p className="text-lg font-bold text-indigo-900 leading-tight">{selectedApplication.job_title || 'General Application'}</p>
-                    <p className="text-slate-600 font-bold text-xs uppercase tracking-wider mt-1">{selectedApplication.company_name || 'Direct'}</p>
-                  </div>
-
-                  <div className="pt-6 border-t border-slate-100">
-                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Submission Date</h4>
-                    <p className="text-sm font-bold text-slate-700">
-                      {new Date(selectedApplication.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Right Column: Interaction */}
-                <div className="space-y-8">
-                  {selectedApplication.cover_letter && (
-                    <div>
-                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Message from Candidate</h4>
-                      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-600 text-sm leading-relaxed max-h-[160px] overflow-y-auto italic">
-                        "{selectedApplication.cover_letter}"
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedApplication.resume_url && (
-                    <div>
-                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Documents</h4>
-                      <a
-                        href={selectedApplication.resume_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-2xl group hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
-                      >
-                        <div className="flex items-center gap-3">
-                          <FaFileAlt className="w-4 h-4" />
-                          <span className="text-xs font-black uppercase tracking-widest">Candidate Resume</span>
-                        </div>
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </a>
-                    </div>
-                  )}
-
-                </div>
-              </div>
-
-              <div className="mt-12 flex justify-center">
-                <button
-                  onClick={() => setShowApplicationModal(false)}
-                  className="px-12 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 active:scale-95"
-                >
-                  Close Record
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
 
     </div>

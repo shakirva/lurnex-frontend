@@ -11,7 +11,7 @@ const TermsAndConditions = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-jost">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-[#1B4696] to-[#2FBDB9] overflow-hidden">
+      <section className="relative py-20 bg-gradient-to-br from-[#EC1D23] to-[#2FBDB9] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/2 left-0 w-80 h-80 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
           <div className="absolute top-1/2 right-0 w-80 h-80 bg-white rounded-full translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
@@ -32,8 +32,8 @@ const TermsAndConditions = () => {
             
             {/* 1. Introduction */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">1</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">1</span>
                 Introduction
               </h2>
               <p>
@@ -80,11 +80,11 @@ const TermsAndConditions = () => {
             <div className="py-8 border-y border-slate-100">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h2 className="text-lg font-bold text-[#1B4696] mb-3">6. Job Disclaimer</h2>
+                  <h2 className="text-lg font-bold text-[#EC1D23] mb-3">6. Job Disclaimer</h2>
                   <p className="text-sm">We do not guarantee job placement or the authenticity of employers. Users are advised to perform their own due diligence before accepting any offers.</p>
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-[#1B4696] mb-3">7. Employer Responsibility</h2>
+                  <h2 className="text-lg font-bold text-[#EC1D23] mb-3">7. Employer Responsibility</h2>
                   <p className="text-sm">Employers are solely responsible for providing genuine job openings and ensuring compliance with all applicable labor laws.</p>
                 </div>
               </div>
@@ -126,14 +126,14 @@ const TermsAndConditions = () => {
 
             {/* Final Legal Sections */}
             <div className="space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-[#1B4696]/5 rounded-2xl border border-[#1B4696]/10">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-[#EC1D23]/5 rounded-2xl border border-[#EC1D23]/10">
                 <div>
-                  <h3 className="font-bold text-[#1B4696]">18. Governing Law</h3>
+                  <h3 className="font-bold text-[#EC1D23]">18. Governing Law</h3>
                   <p className="text-sm">Jurisdiction: Thrissur, Kerala, India.</p>
                 </div>
-                <div className="h-px md:w-px md:h-12 bg-[#1B4696]/20"></div>
+                <div className="h-px md:w-px md:h-12 bg-[#EC1D23]/20"></div>
                 <div>
-                  <h3 className="font-bold text-[#1B4696]">15. Termination</h3>
+                  <h3 className="font-bold text-[#EC1D23]">15. Termination</h3>
                   <p className="text-sm">Accounts may be suspended for violations of these terms.</p>
                 </div>
               </div>

@@ -150,7 +150,7 @@ export default function FindJobs() {
         <div className="text-center mb-16">
           
           <h1 className="text-5xl font-bold text-slate-900 mb-6">
-            Find Your <span className="bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] bg-clip-text text-transparent">Dream Job</span>
+            Find Your <span className="bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] bg-clip-text text-transparent">Dream Job</span>
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Discover thousands of job opportunities from top companies worldwide. 
@@ -177,7 +177,7 @@ export default function FindJobs() {
                     placeholder="Search jobs, companies..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] text-slate-700 placeholder-slate-400 transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] text-slate-700 placeholder-slate-400 transition-all duration-200"
                   />
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default function FindJobs() {
                     <select
                       value={selectedType}
                       onChange={(e) => setSelectedType(e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
                     >
                       {jobTypes.map(type => (
                         <option key={type} value={type}>{type}</option>
@@ -215,7 +215,7 @@ export default function FindJobs() {
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
                     >
                       <option value="All">All Categories</option>
                       {categories.map(cat => (
@@ -239,7 +239,7 @@ export default function FindJobs() {
                       placeholder="e.g., Dubai, Sharjah..."
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 placeholder-slate-400 font-medium"
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] bg-white text-slate-700 placeholder-slate-400 font-medium"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                       <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -257,7 +257,7 @@ export default function FindJobs() {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#1B4696]/20 focus:border-[#1B4696] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#EC1D23]/20 focus:border-[#EC1D23] bg-white text-slate-700 font-medium appearance-none cursor-pointer"
                     >
                       <option value="newest">Newest First</option>
                       <option value="oldest">Oldest First</option>
@@ -294,7 +294,7 @@ export default function FindJobs() {
             {/* Loading State */}
             {loading && (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B4696] mx-auto"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#EC1D23] mx-auto"></div>
                 <p className="mt-4 text-slate-600">Loading jobs...</p>
               </div>
             )}
@@ -311,7 +311,7 @@ export default function FindJobs() {
                 <p className="text-slate-600 mb-6">{error}</p>
                 <button 
                   onClick={() => fetchJobs(1, true)}
-                  className="px-6 py-3 bg-[#1B4696] text-white rounded-lg font-medium hover:bg-[#1B4696]/90 transition-colors"
+                  className="px-6 py-3 bg-[#EC1D23] text-white rounded-lg font-medium hover:bg-[#EC1D23]/90 transition-colors"
                 >
                   Try Again
                 </button>
@@ -374,7 +374,7 @@ export default function FindJobs() {
                     setSelectedLocation("All");
                     setSelectedCategory("All");
                   }}
-                  className="px-6 py-2 bg-gradient-to-tr from-[#1B4696] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
+                  className="px-6 py-2 bg-gradient-to-tr from-[#EC1D23] to-[#2FBDB9] text-white rounded-lg font-medium hover:opacity-90 transition-all"
                 >
                   Clear Filters
                 </button>

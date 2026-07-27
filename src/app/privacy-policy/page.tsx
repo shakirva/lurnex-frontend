@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-jost">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-[#1B4696] to-[#2FBDB9] overflow-hidden">
+      <section className="relative py-20 bg-gradient-to-br from-[#EC1D23] to-[#2FBDB9] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
@@ -32,8 +32,8 @@ const PrivacyPolicy = () => {
             
             {/* 1. Introduction */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">1</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">1</span>
                 Introduction
               </h2>
               <p>
@@ -46,8 +46,8 @@ const PrivacyPolicy = () => {
 
             {/* 2. Definitions */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">2</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">2</span>
                 Definitions
               </h2>
               <ul className="space-y-3 list-disc pl-5 marker:text-[#2FBDB9]">
@@ -59,8 +59,8 @@ const PrivacyPolicy = () => {
 
             {/* 3. Information We Collect */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">3</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">3</span>
                 Information We Collect
               </h2>
               
@@ -99,8 +99,8 @@ const PrivacyPolicy = () => {
 
             {/* 4. How We Use Your Information */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">4</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">4</span>
                 How We Use Your Information
               </h2>
               <p className="mb-4">We use collected data for the following purposes:</p>
@@ -116,7 +116,7 @@ const PrivacyPolicy = () => {
                   "To ensure legal compliance"
                 ].map((item, i) => (
                   <li key={i} className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-start space-x-3">
-                    <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#1B4696] shrink-0"></span>
+                    <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#EC1D23] shrink-0"></span>
                     <span className="text-sm font-medium">{item}</span>
                   </li>
                 ))}
@@ -125,8 +125,8 @@ const PrivacyPolicy = () => {
 
             {/* 5. Legal Basis */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">5</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">5</span>
                 Legal Basis for Processing
               </h2>
               <p>We process your data based on: Your consent, performance of a contract, legal obligations, and legitimate business interests.</p>
@@ -134,8 +134,8 @@ const PrivacyPolicy = () => {
 
             {/* 6. Data Sharing */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">6</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">6</span>
                 Data Sharing and Disclosure
               </h2>
               <p className="mb-4">We do not sell your personal data. However, we may share your information with:</p>
@@ -153,8 +153,8 @@ const PrivacyPolicy = () => {
 
             {/* 7. Data Retention */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">7</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">7</span>
                 Data Retention
               </h2>
               <p>
@@ -164,8 +164,8 @@ const PrivacyPolicy = () => {
 
             {/* 8. Data Security */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">8</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">8</span>
                 Data Security
               </h2>
               <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl">
@@ -177,8 +177,8 @@ const PrivacyPolicy = () => {
 
             {/* 9. Your Rights */}
             <div>
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-4 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">9</span>
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-4 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">9</span>
                 Your Rights
               </h2>
               <p className="mb-4">Depending on applicable laws, you may have the right to:</p>
@@ -196,15 +196,15 @@ const PrivacyPolicy = () => {
 
             {/* 14. Contact Information */}
             <div className="pt-8 border-t border-slate-100">
-              <h2 className="text-2xl font-bold text-[#1B4696] mb-6 flex items-center">
-                <span className="w-8 h-8 rounded-lg bg-[#1B4696]/10 text-[#1B4696] flex items-center justify-center mr-3 text-sm">
+              <h2 className="text-2xl font-bold text-[#EC1D23] mb-6 flex items-center">
+                <span className="w-8 h-8 rounded-lg bg-[#EC1D23]/10 text-[#EC1D23] flex items-center justify-center mr-3 text-sm">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </span>
                 Contact Us
               </h2>
-              <div className="bg-[#1B4696] text-white p-8 rounded-3xl">
+              <div className="bg-[#EC1D23] text-white p-8 rounded-3xl">
                 <h3 className="text-xl font-bold mb-4">Triagull Jobs</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">

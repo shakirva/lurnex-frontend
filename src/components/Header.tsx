@@ -3,24 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await logout();
-    router.push("/");
-  };
 
   const navLinks = [
-    { label: "Home", href: "/" },
     { label: "Find Jobs", href: "/jobs" },
-    { label: "Pricing", href: "/subscription" },
-    { label: "Services", href: "/services" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -46,10 +34,7 @@ export default function Header() {
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className={link.label === "Employer Panel"
-                    ? "px-4 py-2 text-sm font-semibold text-[#1B4696] bg-[#1B4696]/5 border border-[#1B4696]/20 rounded-xl hover:bg-[#1B4696] hover:text-white transition-all shadow-sm"
-                    : "text-slate-600 hover:text-[#1B4696] font-medium transition-colors text-sm"
-                  }
+                  className="text-slate-600 hover:text-[#EC1D23] font-medium transition-colors text-sm"
                 >
                   {link.label}
                 </Link>
@@ -59,63 +44,10 @@ export default function Header() {
 
           {/* Auth & Mobile Menu Container */}
           <div className="flex items-center space-x-2 md:space-x-3">
-            {isAuthenticated && user ? (
-              // Desktop Auth Buttons
-              <div className="hidden md:flex items-center space-x-3">
-                {user.role === 'employer' && (
-                  <Link
-                    href="/employer/dashboard"
-                    className="px-4 py-2 text-sm font-medium text-[#1B4696] border border-[#1B4696] rounded-xl hover:bg-[#1B4696] hover:text-white transition-all"
-                  >
-                    Dashboard
-                  </Link>
-                )}
-                {user.role === 'admin' && (
-                  <Link
-                    href="/admin"
-                    className="px-4 py-2 text-sm font-medium text-[#1B4696] border border-[#1B4696] rounded-xl hover:bg-[#1B4696] hover:text-white transition-all"
-                  >
-                    Admin Panel
-                  </Link>
-                )}
-                <Link
-                  href="/profile"
-                  className="flex items-center space-x-2 px-4 py-2 bg-[#1B4696]/10 rounded-xl hover:bg-[#1B4696]/20 transition-all"
-                >
-                  <div className="w-7 h-7 bg-gradient-to-br from-[#1B4696] to-[#2FBDB9] rounded-full flex items-center justify-center text-white text-xs font-bold">
-                    {user.first_name?.[0]}{user.last_name?.[0]}
-                  </div>
-                  <span className="text-sm font-semibold text-[#1B4696]">{user.first_name}</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-red-500 transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              // Sign In and Register Buttons (always visible on top)
-              <div className="flex items-center space-x-2 sm:space-x-3">
-                <Link
-                  href="/login"
-                  className="px-3 py-1.5 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-[#1B4696] border-2 border-[#1B4696] rounded-md hover:bg-[#1B4696] hover:text-white transition-all"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/register"
-                  className="px-3 py-1.5 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white border-2 border-[#227ba2] bg-gradient-to-r from-[#1B4696] to-[#2FBDB9] rounded-md hover:opacity-90 transition-all shadow-md"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
-
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-slate-600 hover:text-[#1B4696] hover:bg-slate-100 transition-colors"
+              className="md:hidden p-2 rounded-md text-slate-600 hover:text-[#EC1D23] hover:bg-slate-100 transition-colors"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,31 +69,11 @@ export default function Header() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
-                className="block px-3 py-2 text-slate-600 hover:text-[#1B4696] font-medium transition-colors rounded-md"
+                className="block px-3 py-2 text-slate-600 hover:text-[#EC1D23] font-medium transition-colors rounded-md"
               >
                 {link.label}
               </Link>
             ))}
-            {isAuthenticated && user && (
-              <div className="pt-4 border-t border-slate-200 space-y-2">
-                {user.role === 'employer' && (
-                  <Link href="/employer/dashboard" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 border-2 border-[#1B4696] text-[#1B4696] rounded-xl font-semibold mb-2">
-                    Employer Dashboard
-                  </Link>
-                )}
-                {user.role === 'admin' && (
-                  <Link href="/admin" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 border-2 border-[#1B4696] text-[#1B4696] rounded-xl font-semibold mb-2">
-                    Admin Panel
-                  </Link>
-                )}
-                <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="block w-full text-center px-4 py-2 bg-[#1B4696]/10 text-[#1B4696] rounded-xl font-semibold">
-                  My Profile ({user.first_name})
-                </Link>
-                <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="block w-full text-center px-4 py-2 text-red-500 rounded-xl font-semibold border border-red-200">
-                  Logout
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
